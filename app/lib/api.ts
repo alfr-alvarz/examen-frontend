@@ -46,6 +46,12 @@ export async function apiRequest<T>(
   });
 
   if (!response.ok) {
+    // Si el error es 401 (Unauthorized), limpiar el token
+    // El AuthContext manejará la redirección
+    if (response.status === 401) {
+      removeToken();
+    }
+
     const error: ApiError = {
       message: response.statusText,
       status: response.status,

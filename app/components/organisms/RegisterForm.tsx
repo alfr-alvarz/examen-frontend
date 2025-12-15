@@ -95,10 +95,10 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-900">Registrarse</h2>
+    <div className="max-w-md mx-auto bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-8 border border-slate-700/50 backdrop-blur-sm">
+      <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">Registrarse</h2>
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <FormField label="Nombre Completo" required htmlFor="nombre">
           <Input
             id="nombre"
@@ -139,9 +139,9 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
           {isLoading ? 'Registrando...' : 'Registrarse'}
         </Button>
       </form>
-      <p className="mt-4 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-gray-400">
         ¿Ya tienes cuenta?{' '}
-        <Link to="/login" className="text-blue-600 hover:text-blue-700">
+        <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
           Inicia sesión aquí
         </Link>
       </p>

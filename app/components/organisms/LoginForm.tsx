@@ -81,10 +81,10 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-900">Iniciar Sesión</h2>
+    <div className="max-w-md mx-auto bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-8 border border-slate-700/50 backdrop-blur-sm">
+      <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">Iniciar Sesión</h2>
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <FormField label="Correo Electrónico" required htmlFor="correo">
           <Input
             id="correo"
@@ -107,9 +107,9 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
         </Button>
       </form>
-      <p className="mt-4 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-gray-400">
         ¿No tienes cuenta?{' '}
-        <Link to="/register" className="text-blue-600 hover:text-blue-700">
+        <Link to="/register" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
           Regístrate aquí
         </Link>
       </p>

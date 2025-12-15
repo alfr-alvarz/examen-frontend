@@ -23,8 +23,8 @@ export function ProductList({ productos, isLoading, error }: ProductListProps) {
 
   if (productos.length === 0) {
     return (
-      <div className="text-center text-gray-500 py-12">
-        No se encontraron productos
+      <div className="text-center text-gray-400 py-12">
+        <p className="text-lg">No se encontraron productos</p>
       </div>
     );
   }

@@ -91,7 +91,7 @@ export default function Productos() {
     <MainLayout>
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold text-gray-900">Productos</h1>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">Productos</h1>
           {isAdmin && (
             <Button
               onClick={() => setIsCreating(true)}
@@ -111,8 +111,8 @@ export default function Productos() {
       </div>
 
       {isCreating ? (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">Nuevo Producto</h2>
+        <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 mb-6 border border-slate-700/50 backdrop-blur-sm">
+          <h2 className="text-2xl font-bold mb-4 text-white">Nuevo Producto</h2>
           {error && <Alert variant="error" className="mb-4">{error}</Alert>}
           <ProductForm
             onSubmit={handleCreateProducto}

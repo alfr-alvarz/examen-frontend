@@ -173,15 +173,15 @@ function CheckoutContent() {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold mb-6 text-gray-900">Checkout</h1>
+      <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">Checkout</h1>
 
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
 
       <form onSubmit={handleSubmit} className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           {/* Dirección de envío */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">Dirección de Envío</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
+            <h2 className="text-xl font-bold mb-4 text-white">Dirección de Envío</h2>
 
             <div className="space-y-4">
                 <Input
@@ -238,11 +238,11 @@ function CheckoutContent() {
           </div>
 
           {/* Método de envío */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">Método de Envío</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
+            <h2 className="text-xl font-bold mb-4 text-white">Método de Envío</h2>
             <div className="space-y-2">
               {metodosEnvio.map((metodo) => (
-                <label key={metodo.id} className="flex items-center p-3 border rounded hover:bg-gray-50">
+                <label key={metodo.id} className="flex items-center p-3 border border-slate-600/50 rounded-lg hover:bg-slate-700/30 hover:border-blue-500/50 transition-all cursor-pointer">
                   <input
                     type="radio"
                     name="metodoEnvio"
@@ -252,9 +252,9 @@ function CheckoutContent() {
                     className="mr-3"
                   />
                   <div className="flex-1">
-                    <div className="font-semibold text-gray-900">{metodo.nombre}</div>
-                    <div className="text-sm text-gray-600">{metodo.descripcion}</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="font-semibold text-white">{metodo.nombre}</div>
+                    <div className="text-sm text-gray-400">{metodo.descripcion}</div>
+                    <div className="text-sm text-cyan-400">
                       {metodo.tiempo_estimado} - ${(metodo.costo || 0).toLocaleString()}
                     </div>
                   </div>
@@ -264,8 +264,8 @@ function CheckoutContent() {
           </div>
 
           {/* Método de pago */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">Método de Pago</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
+            <h2 className="text-xl font-bold mb-4 text-white">Método de Pago</h2>
             <Select
               value={metodoPago}
               onChange={(e) => setMetodoPago(e.target.value as MetodoPago)}
@@ -279,8 +279,8 @@ function CheckoutContent() {
           </div>
 
           {/* Notas */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">Notas (Opcional)</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
+            <h2 className="text-xl font-bold mb-4 text-white">Notas (Opcional)</h2>
             <Textarea
               value={notas}
               onChange={(e) => setNotas(e.target.value)}
@@ -291,15 +291,15 @@ function CheckoutContent() {
         </div>
 
         {/* Resumen */}
-        <div className="bg-white rounded-lg shadow-md p-6 h-fit">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">Resumen</h2>
+        <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 h-fit border border-slate-700/50 backdrop-blur-sm">
+          <h2 className="text-xl font-bold mb-4 text-white">Resumen</h2>
           <div className="space-y-2 mb-4">
             {items.map((item) => (
               <div key={item.id} className="flex justify-between text-sm">
-                <span className="text-gray-900">
+                <span className="text-gray-300">
                   {item.producto?.nombre} × {item.cantidad}
                 </span>
-                <span className="text-gray-900">
+                <span className="text-gray-300 font-semibold">
                   ${formatPrice(((item.producto?.precio_con_iva || 0) * (item.cantidad || 0)))}
                 </span>
               </div>

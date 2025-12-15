@@ -237,7 +237,7 @@ export default function ProductoDetalle() {
   if (!producto) {
     return (
       <MainLayout>
-        <div className="text-center text-gray-900">Producto no encontrado</div>
+        <div className="text-center text-gray-300 text-lg">Producto no encontrado</div>
       </MainLayout>
     );
   }
@@ -245,7 +245,7 @@ export default function ProductoDetalle() {
   return (
     <MainLayout>
       <div className="flex items-center justify-between mb-4">
-        <Link to="/productos" className="text-blue-600 hover:text-blue-700">
+        <Link to="/productos" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
           ← Volver a productos
         </Link>
         {isAdmin && !isEditing && (
@@ -256,8 +256,8 @@ export default function ProductoDetalle() {
       </div>
 
       {isEditing && producto ? (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">Editar Producto</h2>
+        <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
+          <h2 className="text-2xl font-bold mb-4 text-white">Editar Producto</h2>
           {success && <Alert variant="success" className="mb-4">{success}</Alert>}
           {error && <Alert variant="error" className="mb-4">{error}</Alert>}
           <ProductForm
@@ -273,7 +273,7 @@ export default function ProductoDetalle() {
           />
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl overflow-hidden border border-slate-700/50 backdrop-blur-sm">
         <div className="md:flex">
           <div className="md:w-1/2">
             {producto.rutaImagen ? (
@@ -283,35 +283,35 @@ export default function ProductoDetalle() {
                 className="w-full h-96 object-cover"
               />
             ) : (
-              <div className="w-full h-96 bg-gray-200 flex items-center justify-center">
+              <div className="w-full h-96 bg-slate-700/50 flex items-center justify-center border-r border-slate-700/50">
                 <span className="text-gray-400">Sin imagen</span>
               </div>
             )}
           </div>
           <div className="md:w-1/2 p-6">
-            <h1 className="text-3xl font-bold mb-4 text-gray-900">{producto.nombre}</h1>
-            <p className="text-gray-600 mb-6">{producto.descripcion}</p>
+            <h1 className="text-3xl font-bold mb-4 text-white">{producto.nombre}</h1>
+            <p className="text-gray-300 mb-6">{producto.descripcion}</p>
 
             <div className="mb-6">
               <div className="flex items-baseline gap-4 mb-2">
-                <span className="text-3xl font-bold text-blue-600">
+                <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   ${formatPrice(producto.precio_con_iva)}
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-400">
                   IVA incluido (${producto.iva || 0}%)
                 </span>
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-400">
                 Precio base: ${formatPrice(producto.precio_base)}
               </div>
             </div>
 
             <div className="mb-6">
-              <div className="text-sm text-gray-600 mb-2">
-                <strong>Stock disponible:</strong> {producto.stock_actual}
+              <div className="text-sm text-gray-300 mb-2">
+                <strong>Stock disponible:</strong> <span className="text-cyan-400">{producto.stock_actual}</span>
               </div>
               {producto.stock_actual <= producto.stock_minimo && (
-                <div className="text-sm text-orange-600">
+                <div className="text-sm text-orange-400">
                   ⚠️ Stock bajo
                 </div>
               )}
@@ -351,8 +351,8 @@ export default function ProductoDetalle() {
       )}
 
       {/* Sección de Reseñas */}
-      <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900">Reseñas</h2>
+      <div className="mt-8 bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
+        <h2 className="text-2xl font-bold mb-6 text-white">Reseñas</h2>
         
         {isAuthenticated && !isCreatingResena && !resenaEditando && (
           <div className="mb-6">
@@ -369,8 +369,8 @@ export default function ProductoDetalle() {
         )}
 
         {isCreatingResena && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">
+          <div className="mb-6 p-4 bg-slate-700/30 rounded-lg border border-slate-600/50">
+            <h3 className="text-lg font-semibold mb-4 text-white">
               {resenaEditando ? 'Editar Reseña' : 'Nueva Reseña'}
             </h3>
             {!resenaEditando && pedidos.length > 0 && (

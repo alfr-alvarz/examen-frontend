@@ -53,11 +53,11 @@ export function ReviewCard({ resena, onEdit, onDelete, showActions = false }: Re
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
+    <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-lg shadow-lg p-4 border border-slate-700/50 backdrop-blur-sm">
       <div className="flex justify-between items-start mb-3">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <span className="font-semibold text-gray-900">
+            <span className="font-semibold text-white">
               {resena.usuario?.nombre || 'Usuario anónimo'}
             </span>
             {!resena.aprobada && (
@@ -68,7 +68,7 @@ export function ReviewCard({ resena, onEdit, onDelete, showActions = false }: Re
             <div className="flex">
               {renderStars(resena.calificacion)}
             </div>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-400">
               {formatDate(resena.fecha_creacion)}
             </span>
           </div>
@@ -98,7 +98,7 @@ export function ReviewCard({ resena, onEdit, onDelete, showActions = false }: Re
         )}
       </div>
       {resena.comentario && (
-        <p className="text-gray-700 whitespace-pre-wrap">{resena.comentario}</p>
+        <p className="text-gray-300 whitespace-pre-wrap">{resena.comentario}</p>
       )}
     </div>
   );

@@ -114,13 +114,13 @@ function CarritoContent() {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold mb-6 text-gray-900">Mi Carrito</h1>
+      <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">Mi Carrito</h1>
 
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
 
       {items.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-8 text-center">
-          <p className="text-gray-600 mb-4">Tu carrito está vacío</p>
+        <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-8 text-center border border-slate-700/50 backdrop-blur-sm">
+          <p className="text-gray-300 mb-4 text-lg">Tu carrito está vacío</p>
           <Link to="/productos">
             <Button>Ver Productos</Button>
           </Link>

@@ -17,22 +17,22 @@ export function CartSummary({
   isLoading,
 }: CartSummaryProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 h-fit">
-      <h2 className="text-xl font-semibold mb-4 text-gray-900">Resumen</h2>
-      <div className="space-y-2 mb-4">
-        <div className="flex justify-between">
-          <span className="text-gray-900">Subtotal:</span>
-          <span className="text-gray-900">${formatPrice(subtotal)}</span>
+    <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 h-fit border border-slate-700/50 backdrop-blur-sm">
+      <h2 className="text-xl font-bold mb-4 text-white bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Resumen</h2>
+      <div className="space-y-3 mb-4">
+        <div className="flex justify-between text-gray-300">
+          <span>Subtotal:</span>
+          <span className="font-semibold">${formatPrice(subtotal)}</span>
         </div>
-        <div className="flex justify-between">
-          <span className="text-gray-900">Envío:</span>
-          <span className="text-gray-900">${formatPrice(costoEnvio)}</span>
+        <div className="flex justify-between text-gray-300">
+          <span>Envío:</span>
+          <span className="font-semibold">${formatPrice(costoEnvio)}</span>
         </div>
       </div>
-      <div className="border-t pt-4 mb-4">
+      <div className="border-t border-slate-700 pt-4 mb-4">
         <div className="flex justify-between text-xl font-bold">
-          <span className="text-gray-900">Total:</span>
-          <span className="text-gray-900">${formatPrice(total)}</span>
+          <span className="text-white">Total:</span>
+          <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">${formatPrice(total)}</span>
         </div>
       </div>
       <Button fullWidth onClick={onCheckout} disabled={isLoading}>
