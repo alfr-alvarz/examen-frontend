@@ -84,13 +84,23 @@ function PedidoDetalleContent() {
               Pedido #{pedido.numero_pedido}
             </h1>
             <p className="text-gray-600">
-              Fecha: {new Date(pedido.fecha_hora).toLocaleDateString('es-ES', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
+              Fecha: {pedido.fecha_hora ? (() => {
+                try {
+                  const fecha = new Date(pedido.fecha_hora);
+                  if (isNaN(fecha.getTime())) {
+                    return pedido.fecha_hora; // Mostrar el string original si no se puede parsear
+                  }
+                  return fecha.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  });
+                } catch {
+                  return pedido.fecha_hora;
+                }
+              })() : 'No disponible'}
             </p>
           </div>
           <Badge variant={getEstadoVariant(pedido.estado)}>
@@ -119,17 +129,38 @@ function PedidoDetalleContent() {
               )}
               {pedido.fecha_confirmacion && (
                 <p>
-                  Confirmado: {new Date(pedido.fecha_confirmacion).toLocaleDateString('es-ES')}
+                  Confirmado: {(() => {
+                    try {
+                      const fecha = new Date(pedido.fecha_confirmacion);
+                      return isNaN(fecha.getTime()) ? pedido.fecha_confirmacion : fecha.toLocaleDateString('es-ES');
+                    } catch {
+                      return pedido.fecha_confirmacion;
+                    }
+                  })()}
                 </p>
               )}
               {pedido.fecha_envio && (
                 <p>
-                  Enviado: {new Date(pedido.fecha_envio).toLocaleDateString('es-ES')}
+                  Enviado: {(() => {
+                    try {
+                      const fecha = new Date(pedido.fecha_envio);
+                      return isNaN(fecha.getTime()) ? pedido.fecha_envio : fecha.toLocaleDateString('es-ES');
+                    } catch {
+                      return pedido.fecha_envio;
+                    }
+                  })()}
                 </p>
               )}
               {pedido.fecha_entrega && (
                 <p>
-                  Entregado: {new Date(pedido.fecha_entrega).toLocaleDateString('es-ES')}
+                  Entregado: {(() => {
+                    try {
+                      const fecha = new Date(pedido.fecha_entrega);
+                      return isNaN(fecha.getTime()) ? pedido.fecha_entrega : fecha.toLocaleDateString('es-ES');
+                    } catch {
+                      return pedido.fecha_entrega;
+                    }
+                  })()}
                 </p>
               )}
             </div>
@@ -154,11 +185,26 @@ function PedidoDetalleContent() {
                 <div className="flex-1">
                   <p className="font-semibold text-gray-900">{detalle.producto?.nombre}</p>
                   <p className="text-sm text-gray-600">
-                    Cantidad: {detalle.cantidad} × ${(detalle.precio_unitario_con_iva || 0).toLocaleString()}
+                    Cantidad: {detalle.cantidad} × ${(() => {
+                      const precio = Number(
+                        detalle.precio_unitario_con_iva 
+                        || detalle.precioUnitarioConIva 
+                        || detalle.precio_unitario_con_iva
+                        || 0
+                      );
+                      return precio.toLocaleString();
+                    })()}
                   </p>
                 </div>
                 <span className="font-semibold text-gray-900">
-                  ${(detalle.subtotal_con_iva || 0).toLocaleString()}
+                  ${(() => {
+                    const subtotal = Number(
+                      detalle.subtotal_con_iva 
+                      || detalle.subtotalConIva 
+                      || 0
+                    );
+                    return subtotal.toLocaleString();
+                  })()}
                 </span>
               </div>
             ))}
@@ -168,19 +214,19 @@ function PedidoDetalleContent() {
         <div className="border-t pt-4">
           <div className="flex justify-between mb-2">
                 <span className="text-gray-900">Subtotal:</span>
-                <span className="text-gray-900">${(pedido.subtotal || 0).toLocaleString()}</span>
+                <span className="text-gray-900">${Number(pedido.subtotal || 0).toLocaleString()}</span>
           </div>
           <div className="flex justify-between mb-2">
             <span className="text-gray-900">IVA:</span>
-            <span className="text-gray-900">${(pedido.total_iva || 0).toLocaleString()}</span>
+            <span className="text-gray-900">${Number(pedido.total_iva || 0).toLocaleString()}</span>
           </div>
           <div className="flex justify-between mb-2">
             <span className="text-gray-900">Costo de envío:</span>
-            <span className="text-gray-900">${(pedido.costo_envio || 0).toLocaleString()}</span>
+            <span className="text-gray-900">${Number(pedido.costo_envio || 0).toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-xl font-bold pt-2 border-t">
             <span className="text-gray-900">Total:</span>
-            <span className="text-gray-900">${(pedido.total || 0).toLocaleString()}</span>
+            <span className="text-gray-900">${Number(pedido.total || 0).toLocaleString()}</span>
           </div>
         </div>
       </div>

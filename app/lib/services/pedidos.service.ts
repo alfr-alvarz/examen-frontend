@@ -1,17 +1,21 @@
 import { api } from '../api';
+import { transformPedido } from '../utils/transform';
 import type { Pedido, CrearPedidoRequest, EstadoPedido } from '../types';
 
 export const pedidosService = {
   async getAll(): Promise<Pedido[]> {
-    return api.get<Pedido[]>('/api/pedidos');
+    const data = await api.get<any[]>('/api/pedidos');
+    return Array.isArray(data) ? data.map(transformPedido) : [];
   },
 
   async getById(id: number): Promise<Pedido> {
-    return api.get<Pedido>(`/api/pedidos/${id}`);
+    const data = await api.get<any>(`/api/pedidos/${id}`);
+    return transformPedido(data) as Pedido;
   },
 
   async getMisPedidos(): Promise<Pedido[]> {
-    return api.get<Pedido[]>('/api/pedidos/mis-pedidos');
+    const data = await api.get<any[]>('/api/pedidos/mis-pedidos');
+    return Array.isArray(data) ? data.map(transformPedido) : [];
   },
 
   async create(data: CrearPedidoRequest): Promise<Pedido> {

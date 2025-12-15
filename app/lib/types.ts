@@ -185,8 +185,8 @@ export interface AgregarAlCarritoRequest {
 }
 
 export interface CrearResenaRequest {
-  producto_id: number;
-  pedido_id: number;
+  productoId: number;
+  pedidoId: number;
   calificacion: number;
   comentario: string;
 }
