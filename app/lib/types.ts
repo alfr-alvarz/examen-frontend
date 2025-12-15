@@ -164,6 +164,15 @@ export interface VentaDiaria {
   pedidos_completados: number;
 }
 
+export interface ResumenMensual {
+  year: number;
+  month: number;
+  totalVendido: number;
+  totalPedidos: number;
+  promedio: number;
+  dias: number;
+}
+
 export interface CrearPedidoRequest {
   direccionEnvioId: number;
   metodoPago: MetodoPago;
