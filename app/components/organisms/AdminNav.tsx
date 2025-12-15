@@ -35,6 +35,14 @@ export function AdminNav() {
             Reportes
           </Button>
         </Link>
+        <Link to="/admin/categorias">
+          <Button
+            variant={isActive('/admin/categorias') ? 'primary' : 'secondary'}
+            size="sm"
+          >
+            Categorías
+          </Button>
+        </Link>
       </div>
     </nav>
   );

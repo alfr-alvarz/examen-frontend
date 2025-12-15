@@ -32,7 +32,7 @@ export interface AuthResponse {
 export interface Categoria {
   id: number;
   nombre: string;
-  descripcion: string;
+  descripcion?: string;
   activo: boolean;
   orden: number;
 }

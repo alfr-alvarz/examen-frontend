@@ -5,5 +5,6 @@ export { LoginForm } from './LoginForm';
 export { RegisterForm } from './RegisterForm';
 export { AdminNav } from './AdminNav';
 export { ProductForm } from './ProductForm';
+export { CategoryForm } from './CategoryForm';
 export { ReviewList } from './ReviewList';
 export { ReviewForm } from './ReviewForm';
