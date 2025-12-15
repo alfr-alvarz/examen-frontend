@@ -5,7 +5,6 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { AuthProvider } from '~/contexts/AuthContext';
 import * as authService from '~/lib/services/auth.service';
 
-// Mock del authService
 vi.mock('~/lib/services/auth.service', () => ({
   authService: {
     isAuthenticated: vi.fn(),
@@ -36,7 +35,6 @@ describe('ProtectedRoute', () => {
       </MemoryRouter>
     );
 
-    // Verificar que el spinner está presente
     const spinner = container.querySelector('div[class*="animate-spin"]');
     expect(spinner).toBeInTheDocument();
   });
@@ -61,9 +59,6 @@ describe('ProtectedRoute', () => {
         </AuthProvider>
       </MemoryRouter>
     );
-
-    // El componente Navigate redirige, pero en el test necesitamos esperar
-    // En un test real, verificarías que la navegación ocurre
   });
 
   it('debe mostrar el contenido cuando el usuario está autenticado', async () => {
@@ -87,7 +82,6 @@ describe('ProtectedRoute', () => {
       </MemoryRouter>
     );
 
-    // Esperar a que el contenido se renderice
     await screen.findByText('Contenido protegido');
     expect(screen.getByText('Contenido protegido')).toBeInTheDocument();
   });
@@ -113,7 +107,6 @@ describe('ProtectedRoute', () => {
       </MemoryRouter>
     );
 
-    // Esperar a que se complete la carga y verificar que el contenido de admin no se muestra
     await waitFor(() => {
       expect(screen.queryByText('Contenido de admin')).not.toBeInTheDocument();
     });

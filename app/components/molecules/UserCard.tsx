@@ -28,10 +28,9 @@ export function UserCard({ usuario, onDelete }: UserCardProps) {
           <p>
             Registrado: {usuario.fecha_registro ? (() => {
               try {
-                // La fecha ya debería estar en formato ISO después de la transformación
                 const fecha = new Date(usuario.fecha_registro);
                 if (isNaN(fecha.getTime())) {
-                  return usuario.fecha_registro; // Mostrar el string original si no se puede parsear
+                  return usuario.fecha_registro;
                 }
                 return fecha.toLocaleDateString('es-ES', {
                   year: 'numeric',

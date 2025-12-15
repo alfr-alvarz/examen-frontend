@@ -22,7 +22,6 @@ export default function AdminCategorias() {
       setIsLoading(true);
       setError('');
       const data = await categoriasService.getAll();
-      // Ordenar por orden y luego por nombre
       const sorted = data.sort((a, b) => {
         if (a.orden !== b.orden) {
           return a.orden - b.orden;

@@ -13,7 +13,6 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
 
-  // Función para traducir mensajes de error comunes del backend al español
   const traducirError = (mensaje: string): string => {
     const traducciones: Record<string, string> = {
       'must be a valid email': 'Debe ser un correo electrónico válido',
@@ -32,19 +31,17 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
       'incorrect password': 'Contraseña incorrecta',
     };
 
-    // Buscar traducción exacta
     if (traducciones[mensaje.toLowerCase()]) {
       return traducciones[mensaje.toLowerCase()];
     }
 
-    // Buscar si el mensaje contiene alguna de las frases clave
     for (const [key, value] of Object.entries(traducciones)) {
       if (mensaje.toLowerCase().includes(key)) {
         return value;
       }
     }
 
-    return mensaje; // Devolver el mensaje original si no hay traducción
+    return mensaje;
   };
 
   const validarCorreo = (email: string): boolean => {
@@ -56,7 +53,6 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
     e.preventDefault();
     setError('');
 
-    // Validar correo en el frontend antes de enviar
     if (correo && !validarCorreo(correo)) {
       setError('Por favor, ingresa un correo electrónico válido');
       return;

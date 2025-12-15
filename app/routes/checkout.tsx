@@ -29,7 +29,6 @@ function CheckoutContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  // Form state
   const [nuevaDireccion, setNuevaDireccion] = useState({
     nombre_completo: '',
     telefono: '',
@@ -65,7 +64,6 @@ function CheckoutContent() {
       setItems(carritoData);
       setMetodosEnvio(metodosData);
 
-      // Seleccionar primer método de envío por defecto
       if (metodosData.length > 0) {
         setMetodoEnvioId(metodosData[0].id);
       }
@@ -78,7 +76,6 @@ function CheckoutContent() {
 
   const calcularSubtotal = () => {
     return items.reduce((total, item) => {
-      // Intentar obtener el precio de diferentes formas posibles y convertir a número
       const precio = Number(
         item.producto?.precio_con_iva 
         || 0
@@ -116,14 +113,12 @@ function CheckoutContent() {
     try {
       setIsSubmitting(true);
 
-      // Asegurar que metodoEnvioId sea un número válido
       const metodoEnvioIdNumero = Number(metodoEnvioId);
       if (isNaN(metodoEnvioIdNumero)) {
         setError('El método de envío seleccionado no es válido');
         return;
       }
 
-      // El backend espera camelCase y un array de items
       const pedidoData: any = {
         direccionEnvioId: metodoEnvioIdNumero,
         metodoPago: metodoPago,
@@ -134,7 +129,6 @@ function CheckoutContent() {
         ciudad: nuevaDireccion.ciudad,
         region: nuevaDireccion.region,
         items: items.map((item) => {
-          // Obtener productoId de diferentes formas posibles
           const productoId = item.producto_id 
             || item.producto?.id;
           
@@ -179,7 +173,6 @@ function CheckoutContent() {
 
       <form onSubmit={handleSubmit} className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          {/* Dirección de envío */}
           <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
             <h2 className="text-xl font-bold mb-4 text-white">Dirección de Envío</h2>
 
@@ -237,7 +230,6 @@ function CheckoutContent() {
               </div>
           </div>
 
-          {/* Método de envío */}
           <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
             <h2 className="text-xl font-bold mb-4 text-white">Método de Envío</h2>
             <div className="space-y-2">
@@ -263,7 +255,6 @@ function CheckoutContent() {
             </div>
           </div>
 
-          {/* Método de pago */}
           <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
             <h2 className="text-xl font-bold mb-4 text-white">Método de Pago</h2>
             <Select
@@ -278,7 +269,6 @@ function CheckoutContent() {
             />
           </div>
 
-          {/* Notas */}
           <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
             <h2 className="text-xl font-bold mb-4 text-white">Notas (Opcional)</h2>
             <Textarea
@@ -290,7 +280,6 @@ function CheckoutContent() {
           </div>
         </div>
 
-        {/* Resumen */}
         <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 h-fit border border-slate-700/50 backdrop-blur-sm">
           <h2 className="text-xl font-bold mb-4 text-white">Resumen</h2>
           <div className="space-y-2 mb-4">

@@ -15,11 +15,9 @@ export default function AdminReportes() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Filtros para ventas diarias
   const [fechaInicio, setFechaInicio] = useState<string>('');
   const [fechaFin, setFechaFin] = useState<string>('');
 
-  // Filtros para resumen mensual
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
 
@@ -67,7 +65,6 @@ export default function AdminReportes() {
     loadResumenMensual();
   };
 
-  // Generar años para el selector (últimos 5 años)
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
   const months = [
     { value: 1, label: 'Enero' },
@@ -96,7 +93,6 @@ export default function AdminReportes() {
         <p className="text-gray-400">Visualiza las estadísticas de ventas diarias y resúmenes mensuales</p>
       </div>
 
-      {/* Tabs */}
       <div className="mb-6">
         <div className="flex gap-2 border-b border-slate-700/50">
           <button
@@ -126,7 +122,6 @@ export default function AdminReportes() {
 
       {activeTab === 'ventas-diarias' ? (
         <div className="space-y-6">
-          {/* Filtros */}
           <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
             <h2 className="text-xl font-bold text-white mb-4">Filtros</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -154,7 +149,6 @@ export default function AdminReportes() {
             </div>
           </div>
 
-          {/* Resultados */}
           {isLoading ? (
             <div className="flex justify-center py-12">
               <LoadingSpinner size="lg" />
@@ -221,7 +215,6 @@ export default function AdminReportes() {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Filtros */}
           <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
             <h2 className="text-xl font-bold text-white mb-4">Filtros</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -249,7 +242,6 @@ export default function AdminReportes() {
             </div>
           </div>
 
-          {/* Resultados */}
           {isLoading ? (
             <div className="flex justify-center py-12">
               <LoadingSpinner size="lg" />

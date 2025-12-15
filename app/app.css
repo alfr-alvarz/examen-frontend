@@ -22,7 +22,6 @@ body {
   min-height: 100vh;
 }
 
-/* Efectos de brillo y neón */
 .glow-effect {
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(59, 130, 246, 0.1);
 }
@@ -31,7 +30,6 @@ body {
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.1);
 }
 
-/* Animaciones suaves */
 @keyframes pulse-glow {
   0%, 100% {
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
@@ -45,7 +43,6 @@ body {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
-/* Scrollbar personalizado */
 ::-webkit-scrollbar {
   width: 10px;
 }

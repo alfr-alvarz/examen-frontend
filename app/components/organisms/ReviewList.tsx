@@ -39,7 +39,6 @@ export function ReviewList({
     );
   }
 
-  // Filtrar solo reseñas aprobadas para mostrar
   const resenasAprobadas = resenas.filter((r) => r.aprobada);
   const resenasPendientes = resenas.filter((r) => !r.aprobada && showActions);
 

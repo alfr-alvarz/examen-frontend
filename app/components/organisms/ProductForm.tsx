@@ -74,22 +74,18 @@ export function ProductForm({ producto, onSubmit, onCancel, isLoading, isEditing
         stockActual: Math.floor(stockActualNum),
       };
 
-      // Solo agregar stockMinimo si estamos editando (no en creación)
       if (isEditing) {
         productoData.stockMinimo = Math.floor(stockMinimoNum);
       }
 
-      // Solo agregar categoriaId si tiene valor y es un número válido
       if (categoriaId && !isNaN(Number(categoriaId))) {
         productoData.categoriaId = Math.floor(Number(categoriaId));
       }
 
-      // Solo agregar rutaImagen si tiene valor
       if (rutaImagen.trim()) {
         productoData.rutaImagen = rutaImagen.trim();
       }
 
-      // Solo enviar activo si estamos editando (no en creación)
       if (isEditing) {
         productoData.activo = activo;
       }

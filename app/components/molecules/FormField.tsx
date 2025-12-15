@@ -13,7 +13,6 @@ interface FormFieldProps {
 }
 
 export function FormField({ label, required, error, children, htmlFor }: FormFieldProps) {
-  // Clonar el child para pasarle la prop error si es un Input, Select o Textarea
   const childWithError = isValidElement(children) ? (() => {
     const childType = children.type;
     const isInput = childType === Input || (childType as any)?.displayName === 'Input';
