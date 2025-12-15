@@ -177,7 +177,7 @@ export interface CrearPedidoRequest {
 }
 
 export interface AgregarAlCarritoRequest {
-  producto_id: number;
+  productoId: number;
   cantidad: number;
 }
 

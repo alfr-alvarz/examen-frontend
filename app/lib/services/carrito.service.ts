@@ -3,7 +3,20 @@ import type { CarritoItem, AgregarAlCarritoRequest } from '../types';
 
 export const carritoService = {
   async getCarrito(usuarioId: number): Promise<CarritoItem[]> {
-    return api.get<CarritoItem[]>(`/api/carrito/${usuarioId}`);
+    const data = await api.get<any>(`/api/carrito/${usuarioId}`);
+    // Asegurar que siempre devolvamos un array
+    if (Array.isArray(data)) {
+      return data;
+    }
+    // Si viene envuelto en un objeto, intentar extraer el array
+    if (data && typeof data === 'object') {
+      // Buscar propiedades comunes que puedan contener el array
+      if (Array.isArray(data.items)) return data.items;
+      if (Array.isArray(data.carrito)) return data.carrito;
+      if (Array.isArray(data.productos)) return data.productos;
+    }
+    // Si no es un array, devolver array vacío
+    return [];
   },
 
   async agregarProducto(usuarioId: number, data: AgregarAlCarritoRequest): Promise<CarritoItem> {

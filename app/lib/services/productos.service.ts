@@ -14,8 +14,11 @@ export const productosService = {
   },
 
   async getByCategoria(categoriaId: number): Promise<Producto[]> {
-    const data = await api.get<any[]>(`/api/productos/categoria/${categoriaId}`);
-    return transformProductos(data) as Producto[];
+    const response = await api.get<any>(`/api/categorias/${categoriaId}`);
+    // Si el backend devuelve los productos directamente en la respuesta
+    // o si están dentro de una propiedad 'productos'
+    const productos = Array.isArray(response) ? response : (response.productos || []);
+    return transformProductos(productos) as Producto[];
   },
 
   async create(producto: Partial<Producto>): Promise<Producto> {

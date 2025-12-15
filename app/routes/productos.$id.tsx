@@ -49,7 +49,7 @@ export default function ProductoDetalle() {
       setIsAdding(true);
       setSuccess('');
       await carritoService.agregarProducto(usuario.id, {
-        producto_id: producto.id,
+        productoId: producto.id,
         cantidad,
       });
       setSuccess('Producto agregado al carrito');

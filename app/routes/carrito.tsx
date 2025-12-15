@@ -34,9 +34,11 @@ function CarritoContent() {
     try {
       setIsLoading(true);
       const data = await carritoService.getCarrito(usuario.id);
-      setItems(data);
+      // Asegurar que siempre sea un array
+      setItems(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setError(err.message || 'Error al cargar el carrito');
+      setItems([]); // En caso de error, establecer array vacío
     } finally {
       setIsLoading(false);
     }
