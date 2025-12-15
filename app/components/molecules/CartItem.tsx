@@ -1,4 +1,5 @@
 import type { CarritoItem } from '~/lib/types';
+import { formatPrice } from '~/lib/utils/formatPrice';
 import { Button } from '../atoms';
 
 interface CartItemProps {
@@ -28,7 +29,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
       <div className="flex-1">
         <h3 className="font-semibold text-lg text-gray-900">{item.producto?.nombre}</h3>
         <p className="text-gray-600 text-sm mb-2">
-          ${precioUnitario.toLocaleString()} c/u
+          ${formatPrice(precioUnitario)} c/u
         </p>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -47,7 +48,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
               +
             </button>
           </div>
-          <span className="font-semibold text-gray-900">${precioTotal.toLocaleString()}</span>
+          <span className="font-semibold text-gray-900">${formatPrice(precioTotal)}</span>
           <button
             onClick={() => onRemove(item.id)}
             className="ml-auto text-red-600 hover:text-red-700"

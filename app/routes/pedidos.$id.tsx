@@ -4,6 +4,7 @@ import { MainLayout } from '~/components/templates';
 import { ProtectedRoute } from '~/components/ProtectedRoute';
 import { Badge, LoadingSpinner, Alert, Button } from '~/components/atoms';
 import { pedidosService } from '~/lib/services/pedidos.service';
+import { formatPrice } from '~/lib/utils/formatPrice';
 import type { Pedido } from '~/lib/types';
 
 export default function PedidoDetalle() {
@@ -185,26 +186,24 @@ function PedidoDetalleContent() {
                 <div className="flex-1">
                   <p className="font-semibold text-gray-900">{detalle.producto?.nombre}</p>
                   <p className="text-sm text-gray-600">
-                    Cantidad: {detalle.cantidad} × ${(() => {
-                      const precio = Number(
+                    Cantidad: {detalle.cantidad} × ${formatPrice(
+                      Number(
                         detalle.precio_unitario_con_iva 
                         || detalle.precioUnitarioConIva 
                         || detalle.precio_unitario_con_iva
                         || 0
-                      );
-                      return precio.toLocaleString();
-                    })()}
+                      )
+                    )}
                   </p>
                 </div>
                 <span className="font-semibold text-gray-900">
-                  ${(() => {
-                    const subtotal = Number(
+                  ${formatPrice(
+                    Number(
                       detalle.subtotal_con_iva 
                       || detalle.subtotalConIva 
                       || 0
-                    );
-                    return subtotal.toLocaleString();
-                  })()}
+                    )
+                  )}
                 </span>
               </div>
             ))}
@@ -214,19 +213,19 @@ function PedidoDetalleContent() {
         <div className="border-t pt-4">
           <div className="flex justify-between mb-2">
                 <span className="text-gray-900">Subtotal:</span>
-                <span className="text-gray-900">${Number(pedido.subtotal || 0).toLocaleString()}</span>
+                <span className="text-gray-900">${formatPrice(pedido.subtotal)}</span>
           </div>
           <div className="flex justify-between mb-2">
             <span className="text-gray-900">IVA:</span>
-            <span className="text-gray-900">${Number(pedido.total_iva || 0).toLocaleString()}</span>
+            <span className="text-gray-900">${formatPrice(pedido.total_iva)}</span>
           </div>
           <div className="flex justify-between mb-2">
             <span className="text-gray-900">Costo de envío:</span>
-            <span className="text-gray-900">${Number(pedido.costo_envio || 0).toLocaleString()}</span>
+            <span className="text-gray-900">${formatPrice(pedido.costo_envio)}</span>
           </div>
           <div className="flex justify-between text-xl font-bold pt-2 border-t">
             <span className="text-gray-900">Total:</span>
-            <span className="text-gray-900">${Number(pedido.total || 0).toLocaleString()}</span>
+            <span className="text-gray-900">${formatPrice(pedido.total)}</span>
           </div>
         </div>
       </div>

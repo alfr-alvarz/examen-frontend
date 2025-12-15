@@ -9,6 +9,7 @@ import { useAuth } from '~/contexts/AuthContext';
 import { carritoService } from '~/lib/services/carrito.service';
 import { pedidosService } from '~/lib/services/pedidos.service';
 import { metodosEnvioService } from '~/lib/services/metodos-envio.service';
+import { formatPrice } from '~/lib/utils/formatPrice';
 import type { CarritoItem, MetodoEnvio, MetodoPago } from '~/lib/types';
 
 export default function Checkout() {
@@ -80,9 +81,6 @@ function CheckoutContent() {
       // Intentar obtener el precio de diferentes formas posibles y convertir a número
       const precio = Number(
         item.producto?.precio_con_iva 
-        || item.producto?.precioConIva 
-        || item.precio_con_iva 
-        || item.precioConIva 
         || 0
       );
       const cantidad = Number(item.cantidad || 0);
@@ -138,9 +136,7 @@ function CheckoutContent() {
         items: items.map((item) => {
           // Obtener productoId de diferentes formas posibles
           const productoId = item.producto_id 
-            || item.productoId 
-            || item.producto?.id 
-            || (item.producto as any)?.productoId;
+            || item.producto?.id;
           
           if (!productoId) {
             console.error('No se pudo obtener productoId del item:', item);
@@ -304,7 +300,7 @@ function CheckoutContent() {
                   {item.producto?.nombre} × {item.cantidad}
                 </span>
                 <span className="text-gray-900">
-                  ${((item.producto?.precio_con_iva || item.producto?.precioConIva || item.precio_con_iva || item.precioConIva || 0) * (item.cantidad || 0)).toLocaleString()}
+                  ${formatPrice(((item.producto?.precio_con_iva || 0) * (item.cantidad || 0)))}
                 </span>
               </div>
             ))}

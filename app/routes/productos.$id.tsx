@@ -10,6 +10,7 @@ import { Button, Input, Alert, LoadingSpinner, Select } from '~/components/atoms
 import { FormField } from '~/components/molecules';
 import { ProductForm, ReviewList, ReviewForm } from '~/components/organisms';
 import type { Producto, Resena, CrearResenaRequest, Pedido } from '~/lib/types';
+import { formatPrice } from '~/lib/utils/formatPrice';
 
 export default function ProductoDetalle() {
   const { id } = useParams();
@@ -294,14 +295,14 @@ export default function ProductoDetalle() {
             <div className="mb-6">
               <div className="flex items-baseline gap-4 mb-2">
                 <span className="text-3xl font-bold text-blue-600">
-                  ${(producto.precio_con_iva || 0).toLocaleString()}
+                  ${formatPrice(producto.precio_con_iva)}
                 </span>
                 <span className="text-sm text-gray-500">
                   IVA incluido (${producto.iva || 0}%)
                 </span>
               </div>
               <div className="text-sm text-gray-600">
-                Precio base: ${(producto.precio_base || 0).toLocaleString()}
+                Precio base: ${formatPrice(producto.precio_base)}
               </div>
             </div>
 

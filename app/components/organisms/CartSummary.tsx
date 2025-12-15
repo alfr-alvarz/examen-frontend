@@ -1,4 +1,5 @@
 import { Button } from '../atoms';
+import { formatPrice } from '~/lib/utils/formatPrice';
 
 interface CartSummaryProps {
   subtotal: number;
@@ -21,17 +22,17 @@ export function CartSummary({
       <div className="space-y-2 mb-4">
         <div className="flex justify-between">
           <span className="text-gray-900">Subtotal:</span>
-          <span className="text-gray-900">${(subtotal || 0).toLocaleString()}</span>
+          <span className="text-gray-900">${formatPrice(subtotal)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-900">Envío:</span>
-          <span className="text-gray-900">${(costoEnvio || 0).toLocaleString()}</span>
+          <span className="text-gray-900">${formatPrice(costoEnvio)}</span>
         </div>
       </div>
       <div className="border-t pt-4 mb-4">
         <div className="flex justify-between text-xl font-bold">
           <span className="text-gray-900">Total:</span>
-          <span className="text-gray-900">${(total || 0).toLocaleString()}</span>
+          <span className="text-gray-900">${formatPrice(total)}</span>
         </div>
       </div>
       <Button fullWidth onClick={onCheckout} disabled={isLoading}>
