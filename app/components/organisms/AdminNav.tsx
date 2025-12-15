@@ -9,7 +9,7 @@ export function AdminNav() {
   };
 
   return (
-    <nav className="bg-white rounded-lg shadow-md p-4 mb-6">
+    <nav className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-4 mb-6 border border-slate-700/50 backdrop-blur-sm">
       <div className="flex gap-2 flex-wrap">
         <Link to="/admin">
           <Button
