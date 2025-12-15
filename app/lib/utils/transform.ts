@@ -1,16 +1,9 @@
-// Utilidades para transformar datos de la API
-// NestJS puede devolver datos en camelCase mientras que la BD usa snake_case
-
-// Función helper para parsear fechas en formato ISO 8601 con microsegundos
-// Formato: "2025-12-11 21:05:33.000361"
 export function parseFecha(fechaString: string | undefined | null): string {
   if (!fechaString) return '';
   
   try {
-    // Reemplazar espacio con T y truncar microsegundos a milisegundos
     let fechaISO = fechaString.replace(' ', 'T').replace(/\.(\d{3})\d+/, '.$1');
     
-    // Intentar parsear
     const fecha = new Date(fechaISO);
     return isNaN(fecha.getTime()) ? fechaString : fecha.toISOString();
   } catch {
@@ -21,12 +14,10 @@ export function parseFecha(fechaString: string | undefined | null): string {
 export function transformProducto(producto: any): any {
   if (!producto) return producto;
   
-  // Log para debugging
   if (import.meta.env.DEV) {
     console.log('Transformando producto:', producto);
   }
   
-  // Mapear campos si vienen en camelCase desde NestJS
   const transformed = {
     id: producto.id,
     nombre: producto.nombre,
@@ -57,7 +48,6 @@ export function transformProductos(productos: any[]): any[] {
 export function transformCarritoItem(item: any): any {
   if (!item) return item;
   
-  // Transformar el producto si existe
   const producto = item.producto ? transformProducto(item.producto) : undefined;
   
   return {
@@ -141,7 +131,6 @@ export function transformVentasDiarias(ventas: any[]): any[] {
 export function transformPedido(pedido: any): any {
   if (!pedido) return pedido;
   
-  // Transformar detalles si existen
   const detalles = pedido.detalles 
     ? (Array.isArray(pedido.detalles) ? pedido.detalles.map(transformDetallePedido) : [])
     : undefined;

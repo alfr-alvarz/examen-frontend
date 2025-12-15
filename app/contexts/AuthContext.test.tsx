@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from './AuthContext';
 import * as authService from '~/lib/services/auth.service';
 import * as jwtUtils from '~/lib/utils/jwt';
 
-// Mock de los servicios
 vi.mock('~/lib/services/auth.service', () => ({
   authService: {
     isAuthenticated: vi.fn(),
@@ -20,7 +19,6 @@ vi.mock('~/lib/utils/jwt', () => ({
   getUserFromToken: vi.fn(),
 }));
 
-// Componente de prueba para usar el hook
 function TestComponent() {
   const { usuario, isAuthenticated, isLoading, login, register, logout, hasRole } = useAuth();
 
@@ -196,7 +194,6 @@ describe('AuthContext', () => {
   });
 
   it('debe lanzar error cuando useAuth se usa fuera del provider', () => {
-    // Suprimir el error en la consola para este test
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(() => {

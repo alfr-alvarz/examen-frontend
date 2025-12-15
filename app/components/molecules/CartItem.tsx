@@ -9,7 +9,6 @@ interface CartItemProps {
 }
 
 export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
-  // Intentar obtener el precio de diferentes formas posibles
   const precioUnitario = item.producto?.precio_con_iva 
     || item.producto?.precioConIva 
     || item.precio_con_iva 

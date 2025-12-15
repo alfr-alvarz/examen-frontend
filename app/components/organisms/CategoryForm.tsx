@@ -45,7 +45,6 @@ export function CategoryForm({ categoria, onSubmit, onCancel, isLoading }: Categ
         activo,
       };
 
-      // Solo agregar descripcion si tiene valor (es opcional)
       const descripcionTrimmed = descripcion.trim();
       if (descripcionTrimmed) {
         categoriaData.descripcion = descripcionTrimmed;

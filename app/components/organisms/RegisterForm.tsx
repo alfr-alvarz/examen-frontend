@@ -15,7 +15,6 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
   const [telefono, setTelefono] = useState('');
   const [error, setError] = useState('');
 
-  // Función para traducir mensajes de error comunes del backend al español
   const traducirError = (mensaje: string): string => {
     const traducciones: Record<string, string> = {
       'must be a valid email': 'Debe ser un correo electrónico válido',
@@ -36,19 +35,17 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
       'invalid credentials': 'Credenciales inválidas',
     };
 
-    // Buscar traducción exacta
     if (traducciones[mensaje.toLowerCase()]) {
       return traducciones[mensaje.toLowerCase()];
     }
 
-    // Buscar si el mensaje contiene alguna de las frases clave
     for (const [key, value] of Object.entries(traducciones)) {
       if (mensaje.toLowerCase().includes(key)) {
         return value;
       }
     }
 
-    return mensaje; // Devolver el mensaje original si no hay traducción
+    return mensaje;
   };
 
   const validarCorreo = (email: string): boolean => {
@@ -60,7 +57,6 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
     e.preventDefault();
     setError('');
 
-    // Validaciones en el frontend
     if (!nombre.trim()) {
       setError('El nombre es requerido');
       return;

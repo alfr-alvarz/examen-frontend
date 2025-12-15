@@ -39,10 +39,6 @@ export default function Productos() {
         categoriasService.getAll(),
       ]);
       
-      // Log temporal para debugging
-      console.log('Productos recibidos:', productosData);
-      console.log('Primer producto:', productosData[0]);
-      
       setProductos(productosData.filter((p) => p.activo !== false));
       setCategorias(categoriasData.filter((c) => c.activo !== false));
     } catch (err: any) {

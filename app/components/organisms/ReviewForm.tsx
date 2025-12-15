@@ -49,7 +49,6 @@ export function ReviewForm({
           comentario: comentario.trim() || undefined,
         });
       } else {
-        // Validar que se haya proporcionado un pedidoId válido
         if (!pedidoId || pedidoId <= 0) {
           setError('Debes seleccionar un pedido para crear la reseña');
           return;
@@ -61,14 +60,12 @@ export function ReviewForm({
           calificacion,
         };
         
-        // Solo incluir comentario si tiene valor
         if (comentario.trim()) {
           submitData.comentario = comentario.trim();
         }
         
         await onSubmit(submitData);
       }
-      // Reset form after successful submission (only if not editing)
       if (!isEditing) {
         setCalificacion(5);
         setComentario('');

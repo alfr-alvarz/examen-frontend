@@ -1,7 +1,3 @@
-/**
- * Decodifica un JWT sin verificar la firma
- * Solo para uso en el frontend para obtener información básica del usuario
- */
 export function decodeJWT(token: string): any | null {
   try {
     const parts = token.split('.');
@@ -9,7 +5,6 @@ export function decodeJWT(token: string): any | null {
       return null;
     }
     
-    // Decodificar el payload (segunda parte)
     const payload = parts[1];
     const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
     return JSON.parse(decoded);
@@ -19,9 +14,6 @@ export function decodeJWT(token: string): any | null {
   }
 }
 
-/**
- * Obtiene información del usuario desde el token JWT
- */
 export function getUserFromToken(token: string | null): { id?: number; rol?: string; correo?: string } | null {
   if (!token) return null;
   

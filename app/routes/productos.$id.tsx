@@ -68,17 +68,14 @@ export default function ProductoDetalle() {
   const loadPedidos = async () => {
     try {
       const data = await pedidosService.getMisPedidos();
-      // Filtrar pedidos que contengan el producto (excluyendo solo CANCELADO)
       if (id) {
         const pedidosConProducto = data.filter((pedido) => {
           const tieneProducto = pedido.detalles?.some(
             (detalle) => detalle.producto_id === Number(id)
           );
-          // Permitir todos los estados excepto CANCELADO
           return tieneProducto && pedido.estado !== 'CANCELADO';
         });
         setPedidos(pedidosConProducto);
-        // Seleccionar el primer pedido por defecto si hay pedidos disponibles
         if (pedidosConProducto.length > 0 && !pedidoSeleccionado) {
           setPedidoSeleccionado(pedidosConProducto[0].id);
         }
@@ -140,14 +137,11 @@ export default function ProductoDetalle() {
       setError('');
       
       if (resenaEditando) {
-        // Actualizar reseña existente
         await resenasService.update(resenaEditando.id, data as Partial<Pick<Resena, 'calificacion' | 'comentario'>>);
         setSuccess('Reseña actualizada correctamente');
         setResenaEditando(null);
         setIsCreatingResena(false);
       } else {
-        // Crear nueva reseña
-        // Validar que se haya seleccionado un pedido
         if (!pedidoSeleccionado || pedidoSeleccionado <= 0) {
           setError('Por favor selecciona un pedido');
           setIsCreatingResena(false);
@@ -160,7 +154,6 @@ export default function ProductoDetalle() {
           calificacion: (data as CrearResenaRequest).calificacion,
         };
         
-        // Solo incluir comentario si tiene valor
         if ((data as CrearResenaRequest).comentario) {
           resenaData.comentario = (data as CrearResenaRequest).comentario;
         }
@@ -171,7 +164,6 @@ export default function ProductoDetalle() {
         setIsCreatingResena(false);
       }
       
-      // Recargar reseñas (puede fallar, pero no debe bloquear el flujo)
       try {
         await loadResenas();
       } catch (err) {
@@ -183,7 +175,6 @@ export default function ProductoDetalle() {
       console.error('Error al crear/actualizar reseña:', err);
       setError(err.message || 'Error al guardar la reseña');
       setIsCreatingResena(false);
-      // Re-lanzar el error para que el formulario lo maneje
       throw err;
     }
   };
@@ -350,7 +341,6 @@ export default function ProductoDetalle() {
       </div>
       )}
 
-      {/* Sección de Reseñas */}
       <div className="mt-8 bg-gradient-to-br from-slate-800/90 to-slate-900/90 rounded-xl shadow-xl p-6 border border-slate-700/50 backdrop-blur-sm">
         <h2 className="text-2xl font-bold mb-6 text-white">Reseñas</h2>
         

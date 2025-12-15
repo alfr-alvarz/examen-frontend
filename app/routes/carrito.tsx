@@ -34,7 +34,6 @@ function CarritoContent() {
     try {
       setIsLoading(true);
       const data = await carritoService.getCarrito(usuario.id);
-      // Asegurar que siempre sea un array
       setItems(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setError(err.message || 'Error al cargar el carrito');
@@ -83,7 +82,6 @@ function CarritoContent() {
 
   const calcularTotal = () => {
     const total = items.reduce((total, item) => {
-      // Intentar obtener el precio de diferentes formas posibles
       const precio = item.producto?.precio_con_iva 
         || item.producto?.precioConIva 
         || item.precio_con_iva 
@@ -93,7 +91,6 @@ function CarritoContent() {
       return total + (precio * cantidad);
     }, 0);
     
-    // Log para debugging
     if (import.meta.env.DEV) {
       console.log('Items del carrito:', items);
       console.log('Total calculado:', total);

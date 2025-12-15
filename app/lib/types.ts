@@ -1,5 +1,3 @@
-// Tipos TypeScript para las entidades de la API
-
 export type Rol = 'ADMIN' | 'CLIENTE';
 
 export interface Usuario {
