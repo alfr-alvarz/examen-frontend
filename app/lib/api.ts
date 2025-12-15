@@ -54,6 +54,10 @@ export async function apiRequest<T>(
     try {
       const errorData = await response.json();
       error.message = errorData.message || errorData.error || response.statusText;
+      // Log del error completo para debugging
+      if (import.meta.env.DEV) {
+        console.error('API Error:', { endpoint, status: response.status, error: errorData });
+      }
     } catch {
       // Si no se puede parsear el JSON, usar el mensaje por defecto
     }

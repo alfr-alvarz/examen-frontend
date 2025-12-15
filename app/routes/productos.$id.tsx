@@ -3,11 +3,13 @@ import { useParams, Link, useNavigate } from 'react-router';
 import { MainLayout } from '~/components/templates';
 import { productosService } from '~/lib/services/productos.service';
 import { carritoService } from '~/lib/services/carrito.service';
+import { resenasService } from '~/lib/services/resenas.service';
+import { pedidosService } from '~/lib/services/pedidos.service';
 import { useAuth } from '~/contexts/AuthContext';
-import { Button, Input, Alert, LoadingSpinner } from '~/components/atoms';
+import { Button, Input, Alert, LoadingSpinner, Select } from '~/components/atoms';
 import { FormField } from '~/components/molecules';
-import { ProductForm } from '~/components/organisms';
-import type { Producto } from '~/lib/types';
+import { ProductForm, ReviewList, ReviewForm } from '~/components/organisms';
+import type { Producto, Resena, CrearResenaRequest, Pedido } from '~/lib/types';
 
 export default function ProductoDetalle() {
   const { id } = useParams();
@@ -20,12 +22,22 @@ export default function ProductoDetalle() {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [resenas, setResenas] = useState<Resena[]>([]);
+  const [isLoadingResenas, setIsLoadingResenas] = useState(false);
+  const [isCreatingResena, setIsCreatingResena] = useState(false);
+  const [resenaEditando, setResenaEditando] = useState<Resena | null>(null);
+  const [pedidos, setPedidos] = useState<Pedido[]>([]);
+  const [pedidoSeleccionado, setPedidoSeleccionado] = useState<number | null>(null);
 
   useEffect(() => {
     if (id) {
       loadProducto();
+      loadResenas();
+      if (isAuthenticated) {
+        loadPedidos();
+      }
     }
-  }, [id]);
+  }, [id, isAuthenticated]);
 
   const loadProducto = async () => {
     try {
@@ -36,6 +48,42 @@ export default function ProductoDetalle() {
       setError(err.message || 'Error al cargar el producto');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadResenas = async () => {
+    if (!id) return;
+    try {
+      setIsLoadingResenas(true);
+      const data = await resenasService.getByProducto(Number(id));
+      setResenas(data);
+    } catch (err: any) {
+      console.error('Error al cargar reseñas:', err);
+    } finally {
+      setIsLoadingResenas(false);
+    }
+  };
+
+  const loadPedidos = async () => {
+    try {
+      const data = await pedidosService.getMisPedidos();
+      // Filtrar pedidos que contengan el producto (excluyendo solo CANCELADO)
+      if (id) {
+        const pedidosConProducto = data.filter((pedido) => {
+          const tieneProducto = pedido.detalles?.some(
+            (detalle) => detalle.producto_id === Number(id)
+          );
+          // Permitir todos los estados excepto CANCELADO
+          return tieneProducto && pedido.estado !== 'CANCELADO';
+        });
+        setPedidos(pedidosConProducto);
+        // Seleccionar el primer pedido por defecto si hay pedidos disponibles
+        if (pedidosConProducto.length > 0 && !pedidoSeleccionado) {
+          setPedidoSeleccionado(pedidosConProducto[0].id);
+        }
+      }
+    } catch (err: any) {
+      console.error('Error al cargar pedidos:', err);
     }
   };
 
@@ -79,6 +127,87 @@ export default function ProductoDetalle() {
     } finally {
       setIsAdding(false);
     }
+  };
+
+  const handleCreateResena = async (data: CrearResenaRequest | Partial<Pick<Resena, 'calificacion' | 'comentario'>>) => {
+    if (!producto || !isAuthenticated) {
+      console.error('No se puede crear reseña: producto o usuario no disponible');
+      return;
+    }
+
+    try {
+      setError('');
+      
+      if (resenaEditando) {
+        // Actualizar reseña existente
+        await resenasService.update(resenaEditando.id, data as Partial<Pick<Resena, 'calificacion' | 'comentario'>>);
+        setSuccess('Reseña actualizada correctamente');
+        setResenaEditando(null);
+        setIsCreatingResena(false);
+      } else {
+        // Crear nueva reseña
+        // Validar que se haya seleccionado un pedido
+        if (!pedidoSeleccionado || pedidoSeleccionado <= 0) {
+          setError('Por favor selecciona un pedido');
+          setIsCreatingResena(false);
+          return;
+        }
+        
+        const resenaData: CrearResenaRequest = {
+          productoId: producto.id,
+          pedidoId: pedidoSeleccionado,
+          calificacion: (data as CrearResenaRequest).calificacion,
+        };
+        
+        // Solo incluir comentario si tiene valor
+        if ((data as CrearResenaRequest).comentario) {
+          resenaData.comentario = (data as CrearResenaRequest).comentario;
+        }
+        
+        console.log('Enviando reseña:', resenaData);
+        await resenasService.create(resenaData);
+        setSuccess('Reseña creada correctamente. Estará visible una vez sea aprobada.');
+        setIsCreatingResena(false);
+      }
+      
+      // Recargar reseñas (puede fallar, pero no debe bloquear el flujo)
+      try {
+        await loadResenas();
+      } catch (err) {
+        console.error('Error al recargar reseñas:', err);
+      }
+      
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      console.error('Error al crear/actualizar reseña:', err);
+      setError(err.message || 'Error al guardar la reseña');
+      setIsCreatingResena(false);
+      // Re-lanzar el error para que el formulario lo maneje
+      throw err;
+    }
+  };
+
+  const handleEditResena = (resena: Resena) => {
+    setResenaEditando(resena);
+    setIsCreatingResena(true);
+  };
+
+  const handleDeleteResena = async (id: number) => {
+    try {
+      await resenasService.delete(id);
+      setSuccess('Reseña eliminada correctamente');
+      await loadResenas();
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      setError(err.message || 'Error al eliminar la reseña');
+    }
+  };
+
+  const handleCancelResena = () => {
+    setIsCreatingResena(false);
+    setResenaEditando(null);
+    setError('');
+    setSuccess('');
   };
 
   const isAdmin = hasRole('ADMIN');
@@ -219,6 +348,70 @@ export default function ProductoDetalle() {
         </div>
       </div>
       )}
+
+      {/* Sección de Reseñas */}
+      <div className="mt-8 bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-bold mb-6 text-gray-900">Reseñas</h2>
+        
+        {isAuthenticated && !isCreatingResena && !resenaEditando && (
+          <div className="mb-6">
+            {pedidos.length > 0 ? (
+              <Button onClick={() => setIsCreatingResena(true)}>
+                Escribir una Reseña
+              </Button>
+            ) : (
+              <Alert variant="info">
+                Debes tener un pedido entregado con este producto para poder dejar una reseña.
+              </Alert>
+            )}
+          </div>
+        )}
+
+        {isCreatingResena && (
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900">
+              {resenaEditando ? 'Editar Reseña' : 'Nueva Reseña'}
+            </h3>
+            {!resenaEditando && pedidos.length > 0 && (
+              <div className="mb-4">
+                <FormField label="Seleccionar Pedido" required htmlFor="pedido">
+                  <Select
+                    id="pedido"
+                    value={pedidoSeleccionado?.toString() || ''}
+                    onChange={(e) => setPedidoSeleccionado(e.target.value ? Number(e.target.value) : null)}
+                    options={[
+                      { value: '', label: 'Selecciona un pedido' },
+                      ...pedidos.map((pedido) => ({
+                        value: pedido.id,
+                        label: `Pedido #${pedido.numero_pedido} - ${new Date(pedido.fecha_hora).toLocaleDateString('es-ES')}`,
+                      })),
+                    ]}
+                  />
+                </FormField>
+              </div>
+            )}
+            <ReviewForm
+              productoId={producto.id}
+              pedidoId={pedidoSeleccionado || undefined}
+              resena={resenaEditando || undefined}
+              onSubmit={handleCreateResena}
+              onCancel={handleCancelResena}
+              isEditing={!!resenaEditando}
+            />
+          </div>
+        )}
+
+        {success && <Alert variant="success" className="mb-4">{success}</Alert>}
+        {error && <Alert variant="error" className="mb-4">{error}</Alert>}
+
+        <ReviewList
+          resenas={resenas}
+          isLoading={isLoadingResenas}
+          onEdit={isAuthenticated ? handleEditResena : undefined}
+          onDelete={isAuthenticated ? handleDeleteResena : undefined}
+          showActions={isAuthenticated}
+        />
+      </div>
     </MainLayout>
   );
 }

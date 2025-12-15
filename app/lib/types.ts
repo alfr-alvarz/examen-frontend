@@ -173,6 +173,7 @@ export interface CrearPedidoRequest {
   direccion: string;
   ciudad: string;
   region: string;
+  costoEnvio?: number;
   items: Array<{
     productoId: number;
     cantidad: number;
@@ -188,5 +189,5 @@ export interface CrearResenaRequest {
   productoId: number;
   pedidoId: number;
   calificacion: number;
-  comentario: string;
+  comentario?: string;
 }
