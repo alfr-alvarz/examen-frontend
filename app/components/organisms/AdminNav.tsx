@@ -27,6 +27,14 @@ export function AdminNav() {
             Usuarios
           </Button>
         </Link>
+        <Link to="/admin/reportes">
+          <Button
+            variant={isActive('/admin/reportes') ? 'primary' : 'secondary'}
+            size="sm"
+          >
+            Reportes
+          </Button>
+        </Link>
       </div>
     </nav>
   );

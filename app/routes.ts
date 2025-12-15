@@ -12,4 +12,5 @@ export default [
   route("checkout", "routes/checkout.tsx"),
   route("admin", "routes/admin.tsx"),
   route("admin/usuarios", "routes/admin.usuarios.tsx"),
+  route("admin/reportes", "routes/admin.reportes.tsx"),
 ] satisfies RouteConfig;

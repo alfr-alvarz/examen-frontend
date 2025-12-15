@@ -117,6 +117,27 @@ export function transformUsuarios(usuarios: any[]): any[] {
   return usuarios.map(transformUsuario);
 }
 
+export function transformVentaDiaria(venta: any): any {
+  if (!venta) return venta;
+  
+  return {
+    id: venta.id,
+    fecha: venta.fecha ? parseFecha(venta.fecha) : venta.fecha,
+    cantidad_pedidos: venta.cantidadPedidos ?? venta.cantidad_pedidos ?? 0,
+    total_vendido: Number(venta.totalVendido ?? venta.total_vendido ?? 0),
+    total_productos_vendidos: venta.totalProductosVendidos ?? venta.total_productos_vendidos ?? 0,
+    producto_mas_vendido_id: venta.productoMasVendidoId ?? venta.producto_mas_vendido_id,
+    promedio_ticket: Number(venta.promedioTicket ?? venta.promedio_ticket ?? 0),
+    pedidos_pendientes: venta.pedidosPendientes ?? venta.pedidos_pendientes ?? 0,
+    pedidos_completados: venta.pedidosCompletados ?? venta.pedidos_completados ?? 0,
+  };
+}
+
+export function transformVentasDiarias(ventas: any[]): any[] {
+  if (!Array.isArray(ventas)) return [];
+  return ventas.map(transformVentaDiaria);
+}
+
 export function transformPedido(pedido: any): any {
   if (!pedido) return pedido;
   

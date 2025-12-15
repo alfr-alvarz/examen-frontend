@@ -1,4 +1,5 @@
 import { api } from '../api';
+import { transformVentasDiarias } from '../utils/transform';
 import type { VentaDiaria } from '../types';
 
 export const ventasService = {
@@ -8,7 +9,8 @@ export const ventasService = {
     if (fechaFin) params.append('fechaFin', fechaFin);
     
     const query = params.toString();
-    return api.get<VentaDiaria[]>(`/api/reportes/ventas-diarias${query ? `?${query}` : ''}`);
+    const data = await api.get<any[]>(`/api/reportes/ventas-diarias${query ? `?${query}` : ''}`);
+    return transformVentasDiarias(data);
   },
 
   async getResumenMensual(mes?: string, año?: string): Promise<any> {
