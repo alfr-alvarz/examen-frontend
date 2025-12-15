@@ -1,16 +1,23 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { MainLayout } from '~/components/templates';
 import { ProductList, CategoryFilter } from '~/components';
+import { ProductForm } from '~/components/organisms';
+import { Button, Alert } from '~/components/atoms';
 import { productosService } from '~/lib/services/productos.service';
 import { categoriasService } from '~/lib/services/categorias.service';
+import { useAuth } from '~/contexts/AuthContext';
 import type { Producto, Categoria } from '~/lib/types';
 
 export default function Productos() {
+  const { hasRole } = useAuth();
   const [productos, setProductos] = useState<Producto[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [categoriaFiltro, setCategoriaFiltro] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -64,17 +71,62 @@ export default function Productos() {
     }
   };
 
+  const handleCreateProducto = async (productoData: Partial<Producto>) => {
+    try {
+      setIsSaving(true);
+      setError('');
+      await productosService.create(productoData);
+      setIsCreating(false);
+      await loadProductos(); // Recargar productos
+    } catch (err: any) {
+      setError(err.message || 'Error al crear el producto');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const isAdmin = hasRole('ADMIN');
+
   return (
     <MainLayout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-4 text-gray-900">Productos</h1>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold text-gray-900">Productos</h1>
+          {isAdmin && (
+            <Button
+              onClick={() => setIsCreating(true)}
+              size="lg"
+              className="flex items-center gap-2"
+            >
+              <span className="text-2xl">+</span>
+              Agregar Producto
+            </Button>
+          )}
+        </div>
         <CategoryFilter
           categorias={categorias}
           categoriaSeleccionada={categoriaFiltro}
           onSelectCategoria={setCategoriaFiltro}
         />
       </div>
-      <ProductList productos={productos} isLoading={isLoading} error={error} />
+
+      {isCreating ? (
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Nuevo Producto</h2>
+          {error && <Alert variant="error" className="mb-4">{error}</Alert>}
+          <ProductForm
+            onSubmit={handleCreateProducto}
+            onCancel={() => {
+              setIsCreating(false);
+              setError('');
+            }}
+            isLoading={isSaving}
+            isEditing={false}
+          />
+        </div>
+      ) : (
+        <ProductList productos={productos} isLoading={isLoading} error={error} />
+      )}
     </MainLayout>
   );
 }

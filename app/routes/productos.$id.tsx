@@ -6,16 +6,18 @@ import { carritoService } from '~/lib/services/carrito.service';
 import { useAuth } from '~/contexts/AuthContext';
 import { Button, Input, Alert, LoadingSpinner } from '~/components/atoms';
 import { FormField } from '~/components/molecules';
+import { ProductForm } from '~/components/organisms';
 import type { Producto } from '~/lib/types';
 
 export default function ProductoDetalle() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, usuario } = useAuth();
+  const { isAuthenticated, usuario, hasRole } = useAuth();
   const [producto, setProducto] = useState<Producto | null>(null);
   const [cantidad, setCantidad] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -61,6 +63,26 @@ export default function ProductoDetalle() {
     }
   };
 
+  const handleUpdateProducto = async (productoData: Partial<Producto>) => {
+    if (!producto) return;
+
+    try {
+      setIsAdding(true);
+      setError('');
+      const updated = await productosService.update(producto.id, productoData);
+      setProducto(updated);
+      setIsEditing(false);
+      setSuccess('Producto actualizado correctamente');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      setError(err.message || 'Error al actualizar el producto');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const isAdmin = hasRole('ADMIN');
+
   if (isLoading) {
     return (
       <MainLayout>
@@ -92,11 +114,36 @@ export default function ProductoDetalle() {
 
   return (
     <MainLayout>
-      <Link to="/productos" className="text-blue-600 hover:text-blue-700 mb-4 inline-block">
-        ← Volver a productos
-      </Link>
+      <div className="flex items-center justify-between mb-4">
+        <Link to="/productos" className="text-blue-600 hover:text-blue-700">
+          ← Volver a productos
+        </Link>
+        {isAdmin && !isEditing && (
+          <Button variant="secondary" size="sm" onClick={() => setIsEditing(true)}>
+            Editar Producto
+          </Button>
+        )}
+      </div>
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      {isEditing && producto ? (
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Editar Producto</h2>
+          {success && <Alert variant="success" className="mb-4">{success}</Alert>}
+          {error && <Alert variant="error" className="mb-4">{error}</Alert>}
+          <ProductForm
+            producto={producto}
+            onSubmit={handleUpdateProducto}
+            onCancel={() => {
+              setIsEditing(false);
+              setError('');
+              setSuccess('');
+            }}
+            isLoading={isAdding}
+            isEditing={true}
+          />
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="md:flex">
           <div className="md:w-1/2">
             {producto.rutaImagen ? (
@@ -171,6 +218,7 @@ export default function ProductoDetalle() {
           </div>
         </div>
       </div>
+      )}
     </MainLayout>
   );
 }

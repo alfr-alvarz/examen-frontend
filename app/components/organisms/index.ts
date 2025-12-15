@@ -4,3 +4,4 @@ export { CartSummary } from './CartSummary';
 export { LoginForm } from './LoginForm';
 export { RegisterForm } from './RegisterForm';
 export { AdminNav } from './AdminNav';
+export { ProductForm } from './ProductForm';
