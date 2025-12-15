@@ -1,6 +1,23 @@
 // Utilidades para transformar datos de la API
 // NestJS puede devolver datos en camelCase mientras que la BD usa snake_case
 
+// Función helper para parsear fechas en formato ISO 8601 con microsegundos
+// Formato: "2025-12-11 21:05:33.000361"
+export function parseFecha(fechaString: string | undefined | null): string {
+  if (!fechaString) return '';
+  
+  try {
+    // Reemplazar espacio con T y truncar microsegundos a milisegundos
+    let fechaISO = fechaString.replace(' ', 'T').replace(/\.(\d{3})\d+/, '.$1');
+    
+    // Intentar parsear
+    const fecha = new Date(fechaISO);
+    return isNaN(fecha.getTime()) ? fechaString : fecha.toISOString();
+  } catch {
+    return fechaString;
+  }
+}
+
 export function transformProducto(producto: any): any {
   if (!producto) return producto;
   
@@ -78,6 +95,28 @@ export function transformDetallePedido(detalle: any): any {
   };
 }
 
+export function transformUsuario(usuario: any): any {
+  if (!usuario) return usuario;
+  
+  const fechaRegistroRaw = usuario.fechaRegistro ?? usuario.fecha_registro ?? usuario.fechaCreacion ?? '';
+  const fechaRegistro = fechaRegistroRaw ? parseFecha(fechaRegistroRaw) : '';
+  
+  return {
+    id: usuario.id,
+    nombre: usuario.nombre,
+    correo: usuario.correo,
+    rol: usuario.rol,
+    telefono: usuario.telefono,
+    fecha_registro: fechaRegistro,
+    activo: usuario.activo !== undefined ? usuario.activo : true,
+  };
+}
+
+export function transformUsuarios(usuarios: any[]): any[] {
+  if (!Array.isArray(usuarios)) return [];
+  return usuarios.map(transformUsuario);
+}
+
 export function transformPedido(pedido: any): any {
   if (!pedido) return pedido;
   
@@ -89,7 +128,7 @@ export function transformPedido(pedido: any): any {
   return {
     id: pedido.id,
     numero_pedido: pedido.numeroPedido ?? pedido.numero_pedido,
-    fecha_hora: pedido.fechaHora ?? pedido.fecha_hora ?? pedido.fecha ?? '',
+    fecha_hora: pedido.fechaHora ? parseFecha(pedido.fechaHora) : (pedido.fecha_hora ? parseFecha(pedido.fecha_hora) : (pedido.fecha ? parseFecha(pedido.fecha) : '')),
     estado: pedido.estado,
     subtotal: Number(pedido.subtotal ?? 0),
     total_iva: Number(pedido.totalIva ?? pedido.total_iva ?? 0),
@@ -98,9 +137,9 @@ export function transformPedido(pedido: any): any {
     metodo_pago: pedido.metodoPago ?? pedido.metodo_pago,
     notas_cliente: pedido.notasCliente ?? pedido.notas_cliente,
     notas_admin: pedido.notasAdmin ?? pedido.notas_admin,
-    fecha_confirmacion: pedido.fechaConfirmacion ?? pedido.fecha_confirmacion,
-    fecha_envio: pedido.fechaEnvio ?? pedido.fecha_envio,
-    fecha_entrega: pedido.fechaEntrega ?? pedido.fecha_entrega,
+    fecha_confirmacion: pedido.fechaConfirmacion ? parseFecha(pedido.fechaConfirmacion) : (pedido.fecha_confirmacion ? parseFecha(pedido.fecha_confirmacion) : undefined),
+    fecha_envio: pedido.fechaEnvio ? parseFecha(pedido.fechaEnvio) : (pedido.fecha_envio ? parseFecha(pedido.fecha_envio) : undefined),
+    fecha_entrega: pedido.fechaEntrega ? parseFecha(pedido.fechaEntrega) : (pedido.fecha_entrega ? parseFecha(pedido.fecha_entrega) : undefined),
     numero_seguimiento: pedido.numeroSeguimiento ?? pedido.numero_seguimiento,
     usuario_id: pedido.usuarioId ?? pedido.usuario_id,
     nombre_destinatario: pedido.nombreDestinatario ?? pedido.nombre_destinatario,

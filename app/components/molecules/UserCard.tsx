@@ -26,11 +26,22 @@ export function UserCard({ usuario, onDelete }: UserCardProps) {
       <div className="flex justify-between items-center">
         <div className="text-sm text-gray-600">
           <p>
-            Registrado: {new Date(usuario.fecha_registro).toLocaleDateString('es-ES', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+            Registrado: {usuario.fecha_registro ? (() => {
+              try {
+                // La fecha ya debería estar en formato ISO después de la transformación
+                const fecha = new Date(usuario.fecha_registro);
+                if (isNaN(fecha.getTime())) {
+                  return usuario.fecha_registro; // Mostrar el string original si no se puede parsear
+                }
+                return fecha.toLocaleDateString('es-ES', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                });
+              } catch {
+                return usuario.fecha_registro || 'No disponible';
+              }
+            })() : 'No disponible'}
           </p>
           <p className={usuario.activo ? 'text-green-600' : 'text-red-600'}>
             {usuario.activo ? '✓ Activo' : '✗ Inactivo'}

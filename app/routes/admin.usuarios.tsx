@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { UserCard } from '~/components/molecules';
-import { Alert, LoadingSpinner } from '~/components/atoms';
+import { Alert, LoadingSpinner, Button } from '~/components/atoms';
 import { usuariosService } from '~/lib/services/usuarios.service';
 import type { Usuario } from '~/lib/types';
 
@@ -45,8 +46,13 @@ export default function AdminUsuarios() {
   return (
     <>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2 text-gray-900">Gestión de Usuarios</h1>
-        <p className="text-gray-600">Administra todos los usuarios del sistema</p>
+        <div className="flex items-center gap-4 mb-4">
+          <Link to="/admin">
+            <Button variant="outline" size="sm">← Volver al Panel</Button>
+          </Link>
+        </div>
+        <h1 className="text-3xl font-bold mb-2 text-white bg-gray-900 px-4 py-2 rounded">Gestión de Usuarios</h1>
+        <p className="text-white bg-gray-900 px-4 py-2 rounded">Administra todos los usuarios del sistema</p>
       </div>
 
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
@@ -58,8 +64,8 @@ export default function AdminUsuarios() {
       ) : (
         <div className="space-y-4">
           <div className="mb-4">
-            <p className="text-sm text-gray-600">
-              Total de usuarios: <strong>{usuarios.length}</strong>
+            <p className="text-sm text-white bg-gray-900 px-4 py-2 rounded">
+              Total de usuarios: <strong className="text-white">{usuarios.length}</strong>
             </p>
           </div>
           {usuarios.map((usuario) => (

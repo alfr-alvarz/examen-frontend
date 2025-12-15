@@ -13,14 +13,70 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
 
+  // Función para traducir mensajes de error comunes del backend al español
+  const traducirError = (mensaje: string): string => {
+    const traducciones: Record<string, string> = {
+      'must be a valid email': 'Debe ser un correo electrónico válido',
+      'must be an email': 'Debe ser un correo electrónico válido',
+      'email must be an email': 'El correo electrónico debe ser válido',
+      'correo must be an email': 'El correo debe ser un correo electrónico válido',
+      'correo must be a valid email': 'El correo debe ser un correo electrónico válido',
+      'invalid email': 'Correo electrónico inválido',
+      'email is required': 'El correo electrónico es requerido',
+      'correo is required': 'El correo es requerido',
+      'password is required': 'La contraseña es requerida',
+      'contrasena is required': 'La contraseña es requerida',
+      'invalid credentials': 'Credenciales inválidas',
+      'unauthorized': 'Credenciales inválidas',
+      'user not found': 'Usuario no encontrado',
+      'incorrect password': 'Contraseña incorrecta',
+    };
+
+    // Buscar traducción exacta
+    if (traducciones[mensaje.toLowerCase()]) {
+      return traducciones[mensaje.toLowerCase()];
+    }
+
+    // Buscar si el mensaje contiene alguna de las frases clave
+    for (const [key, value] of Object.entries(traducciones)) {
+      if (mensaje.toLowerCase().includes(key)) {
+        return value;
+      }
+    }
+
+    return mensaje; // Devolver el mensaje original si no hay traducción
+  };
+
+  const validarCorreo = (email: string): boolean => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
+    // Validar correo en el frontend antes de enviar
+    if (correo && !validarCorreo(correo)) {
+      setError('Por favor, ingresa un correo electrónico válido');
+      return;
+    }
+
+    if (!correo) {
+      setError('El correo electrónico es requerido');
+      return;
+    }
+
+    if (!contrasena) {
+      setError('La contraseña es requerida');
+      return;
+    }
+
     try {
       await onSubmit(correo, contrasena);
     } catch (err: any) {
-      setError(err.message || 'Error al iniciar sesión');
+      const mensajeError = err.message || 'Error al iniciar sesión';
+      setError(traducirError(mensajeError));
     }
   };
 
