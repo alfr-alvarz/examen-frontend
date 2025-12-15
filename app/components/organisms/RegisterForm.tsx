@@ -28,7 +28,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">Registrarse</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-900">Registrarse</h2>
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormField label="Nombre Completo" required htmlFor="nombre">

@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <MainLayout>
       <div className="text-center py-12">
-        <h1 className="text-4xl font-bold mb-4">Bienvenido a la Tienda Online</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-900">Bienvenido a la Tienda Online</h1>
         <p className="text-gray-600 mb-8">
           Descubre nuestros productos y realiza tus compras de forma fácil y segura
         </p>

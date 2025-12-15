@@ -172,7 +172,7 @@ function CheckoutContent() {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold mb-6">Checkout</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-900">Checkout</h1>
 
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
 
@@ -180,7 +180,7 @@ function CheckoutContent() {
         <div className="md:col-span-2 space-y-6">
           {/* Dirección de envío */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Dirección de Envío</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">Dirección de Envío</h2>
 
             {direcciones.length > 0 && (
               <div className="mb-4">
@@ -191,7 +191,7 @@ function CheckoutContent() {
                     onChange={() => setUsarNuevaDireccion(false)}
                     className="mr-2"
                   />
-                  Usar dirección guardada
+                  <span className="text-gray-900">Usar dirección guardada</span>
                 </label>
                 {!usarNuevaDireccion && (
                   <Select
@@ -214,7 +214,7 @@ function CheckoutContent() {
                 onChange={() => setUsarNuevaDireccion(true)}
                 className="mr-2"
               />
-              Nueva dirección
+              <span className="text-gray-900">Nueva dirección</span>
             </label>
 
             {usarNuevaDireccion && (
@@ -275,7 +275,7 @@ function CheckoutContent() {
 
           {/* Método de envío */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Método de Envío</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">Método de Envío</h2>
             <div className="space-y-2">
               {metodosEnvio.map((metodo) => (
                 <label key={metodo.id} className="flex items-center p-3 border rounded hover:bg-gray-50">
@@ -288,7 +288,7 @@ function CheckoutContent() {
                     className="mr-3"
                   />
                   <div className="flex-1">
-                    <div className="font-semibold">{metodo.nombre}</div>
+                    <div className="font-semibold text-gray-900">{metodo.nombre}</div>
                     <div className="text-sm text-gray-600">{metodo.descripcion}</div>
                     <div className="text-sm text-gray-600">
                       {metodo.tiempo_estimado} - ${(metodo.costo || 0).toLocaleString()}
@@ -301,7 +301,7 @@ function CheckoutContent() {
 
           {/* Método de pago */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Método de Pago</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">Método de Pago</h2>
             <Select
               value={metodoPago}
               onChange={(e) => setMetodoPago(e.target.value as MetodoPago)}
@@ -316,7 +316,7 @@ function CheckoutContent() {
 
           {/* Notas */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Notas (Opcional)</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">Notas (Opcional)</h2>
             <Textarea
               value={notas}
               onChange={(e) => setNotas(e.target.value)}
@@ -328,14 +328,14 @@ function CheckoutContent() {
 
         {/* Resumen */}
         <div className="bg-white rounded-lg shadow-md p-6 h-fit">
-          <h2 className="text-xl font-semibold mb-4">Resumen</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">Resumen</h2>
           <div className="space-y-2 mb-4">
             {items.map((item) => (
               <div key={item.id} className="flex justify-between text-sm">
-                <span>
+                <span className="text-gray-900">
                   {item.producto?.nombre} × {item.cantidad}
                 </span>
-                <span>
+                <span className="text-gray-900">
                   ${((item.producto?.precio_con_iva || 0) * item.cantidad).toLocaleString()}
                 </span>
               </div>

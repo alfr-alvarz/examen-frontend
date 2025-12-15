@@ -67,7 +67,7 @@ export default function Productos() {
   return (
     <MainLayout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-4">Productos</h1>
+        <h1 className="text-3xl font-bold mb-4 text-gray-900">Productos</h1>
         <CategoryFilter
           categorias={categorias}
           categoriaSeleccionada={categoriaFiltro}

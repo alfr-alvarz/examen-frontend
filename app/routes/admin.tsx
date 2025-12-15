@@ -8,7 +8,7 @@ export default function Admin() {
     <ProtectedRoute requiredRole="ADMIN">
       <MainLayout>
         <div className="mb-6">
-          <h1 className="text-3xl font-bold">Panel de Administración</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Panel de Administración</h1>
         </div>
         <AdminNav />
         <Outlet />

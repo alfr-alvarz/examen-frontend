@@ -85,7 +85,7 @@ export default function ProductoDetalle() {
   if (!producto) {
     return (
       <MainLayout>
-        <div className="text-center">Producto no encontrado</div>
+        <div className="text-center text-gray-900">Producto no encontrado</div>
       </MainLayout>
     );
   }
@@ -112,7 +112,7 @@ export default function ProductoDetalle() {
             )}
           </div>
           <div className="md:w-1/2 p-6">
-            <h1 className="text-3xl font-bold mb-4">{producto.nombre}</h1>
+            <h1 className="text-3xl font-bold mb-4 text-gray-900">{producto.nombre}</h1>
             <p className="text-gray-600 mb-6">{producto.descripcion}</p>
 
             <div className="mb-6">

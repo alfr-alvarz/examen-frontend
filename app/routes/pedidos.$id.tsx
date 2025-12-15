@@ -80,7 +80,7 @@ function PedidoDetalleContent() {
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">
+            <h1 className="text-3xl font-bold mb-2 text-gray-900">
               Pedido #{pedido.numero_pedido}
             </h1>
             <p className="text-gray-600">
@@ -100,7 +100,7 @@ function PedidoDetalleContent() {
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           <div>
-            <h2 className="text-xl font-semibold mb-3">Dirección de Envío</h2>
+            <h2 className="text-xl font-semibold mb-3 text-gray-900">Dirección de Envío</h2>
             <div className="text-gray-600">
               <p>{pedido.nombre_destinatario}</p>
               <p>{pedido.direccion}</p>
@@ -111,7 +111,7 @@ function PedidoDetalleContent() {
             </div>
           </div>
           <div>
-            <h2 className="text-xl font-semibold mb-3">Información del Pedido</h2>
+            <h2 className="text-xl font-semibold mb-3 text-gray-900">Información del Pedido</h2>
             <div className="text-gray-600 space-y-1">
               <p>Método de pago: {pedido.metodo_pago}</p>
               {pedido.numero_seguimiento && (
@@ -138,13 +138,13 @@ function PedidoDetalleContent() {
 
         {pedido.notas_cliente && (
           <div className="mb-6">
-            <h3 className="font-semibold mb-2">Notas del Cliente</h3>
+            <h3 className="font-semibold mb-2 text-gray-900">Notas del Cliente</h3>
             <p className="text-gray-600">{pedido.notas_cliente}</p>
           </div>
         )}
 
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-3">Productos</h2>
+          <h2 className="text-xl font-semibold mb-3 text-gray-900">Productos</h2>
           <div className="space-y-3">
             {pedido.detalles?.map((detalle) => (
               <div
@@ -152,12 +152,12 @@ function PedidoDetalleContent() {
                 className="flex justify-between items-center p-3 bg-gray-50 rounded"
               >
                 <div className="flex-1">
-                  <p className="font-semibold">{detalle.producto?.nombre}</p>
+                  <p className="font-semibold text-gray-900">{detalle.producto?.nombre}</p>
                   <p className="text-sm text-gray-600">
                     Cantidad: {detalle.cantidad} × ${(detalle.precio_unitario_con_iva || 0).toLocaleString()}
                   </p>
                 </div>
-                <span className="font-semibold">
+                <span className="font-semibold text-gray-900">
                   ${(detalle.subtotal_con_iva || 0).toLocaleString()}
                 </span>
               </div>
@@ -167,20 +167,20 @@ function PedidoDetalleContent() {
 
         <div className="border-t pt-4">
           <div className="flex justify-between mb-2">
-            <span>Subtotal:</span>
-            <span>${(pedido.subtotal || 0).toLocaleString()}</span>
+                <span className="text-gray-900">Subtotal:</span>
+                <span className="text-gray-900">${(pedido.subtotal || 0).toLocaleString()}</span>
           </div>
           <div className="flex justify-between mb-2">
-            <span>IVA:</span>
-            <span>${(pedido.total_iva || 0).toLocaleString()}</span>
+            <span className="text-gray-900">IVA:</span>
+            <span className="text-gray-900">${(pedido.total_iva || 0).toLocaleString()}</span>
           </div>
           <div className="flex justify-between mb-2">
-            <span>Costo de envío:</span>
-            <span>${(pedido.costo_envio || 0).toLocaleString()}</span>
+            <span className="text-gray-900">Costo de envío:</span>
+            <span className="text-gray-900">${(pedido.costo_envio || 0).toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-xl font-bold pt-2 border-t">
-            <span>Total:</span>
-            <span>${(pedido.total || 0).toLocaleString()}</span>
+            <span className="text-gray-900">Total:</span>
+            <span className="text-gray-900">${(pedido.total || 0).toLocaleString()}</span>
           </div>
         </div>
       </div>

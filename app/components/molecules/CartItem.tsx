@@ -20,7 +20,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
         />
       )}
       <div className="flex-1">
-        <h3 className="font-semibold text-lg">{item.producto?.nombre}</h3>
+        <h3 className="font-semibold text-lg text-gray-900">{item.producto?.nombre}</h3>
         <p className="text-gray-600 text-sm mb-2">
           ${(item.producto?.precio_con_iva || 0).toLocaleString()} c/u
         </p>
@@ -32,7 +32,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
             >
               -
             </button>
-            <span className="w-12 text-center">{item.cantidad}</span>
+            <span className="w-12 text-center text-gray-900">{item.cantidad}</span>
             <button
               onClick={() => onUpdateQuantity(item.id, item.cantidad + 1)}
               disabled={item.cantidad >= (item.producto?.stock_actual || 0)}
@@ -41,7 +41,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
               +
             </button>
           </div>
-          <span className="font-semibold">${precioTotal.toLocaleString()}</span>
+          <span className="font-semibold text-gray-900">${precioTotal.toLocaleString()}</span>
           <button
             onClick={() => onRemove(item.id)}
             className="ml-auto text-red-600 hover:text-red-700"

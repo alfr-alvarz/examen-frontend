@@ -48,7 +48,7 @@ function PedidosContent() {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold mb-6">Mis Pedidos</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-900">Mis Pedidos</h1>
 
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
 

@@ -26,7 +26,7 @@ export function OrderCard({ pedido }: OrderCardProps) {
     >
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="text-lg font-semibold">Pedido #{pedido.numero_pedido}</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Pedido #{pedido.numero_pedido}</h3>
           <p className="text-sm text-gray-600">
             {new Date(pedido.fecha_hora).toLocaleDateString('es-ES', {
               year: 'numeric',

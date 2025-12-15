@@ -98,7 +98,7 @@ function CarritoContent() {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold mb-6">Mi Carrito</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-900">Mi Carrito</h1>
 
       {error && <Alert variant="error" className="mb-4">{error}</Alert>}
 

@@ -15,7 +15,7 @@ export function UserCard({ usuario, onDelete }: UserCardProps) {
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{usuario.nombre}</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{usuario.nombre}</h3>
           <p className="text-sm text-gray-600">{usuario.correo}</p>
           {usuario.telefono && (
             <p className="text-sm text-gray-600">Tel: {usuario.telefono}</p>
