@@ -8,7 +8,13 @@ interface CartItemProps {
 }
 
 export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
-  const precioTotal = (item.producto?.precio_con_iva || 0) * item.cantidad;
+  // Intentar obtener el precio de diferentes formas posibles
+  const precioUnitario = item.producto?.precio_con_iva 
+    || item.producto?.precioConIva 
+    || item.precio_con_iva 
+    || item.precioConIva 
+    || 0;
+  const precioTotal = precioUnitario * (item.cantidad || 0);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 flex gap-4">
@@ -22,7 +28,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
       <div className="flex-1">
         <h3 className="font-semibold text-lg text-gray-900">{item.producto?.nombre}</h3>
         <p className="text-gray-600 text-sm mb-2">
-          ${(item.producto?.precio_con_iva || 0).toLocaleString()} c/u
+          ${precioUnitario.toLocaleString()} c/u
         </p>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">

@@ -82,10 +82,24 @@ function CarritoContent() {
   };
 
   const calcularTotal = () => {
-    return items.reduce((total, item) => {
-      const precio = item.producto?.precio_con_iva || 0;
-      return total + precio * item.cantidad;
+    const total = items.reduce((total, item) => {
+      // Intentar obtener el precio de diferentes formas posibles
+      const precio = item.producto?.precio_con_iva 
+        || item.producto?.precioConIva 
+        || item.precio_con_iva 
+        || item.precioConIva 
+        || 0;
+      const cantidad = item.cantidad || 0;
+      return total + (precio * cantidad);
     }, 0);
+    
+    // Log para debugging
+    if (import.meta.env.DEV) {
+      console.log('Items del carrito:', items);
+      console.log('Total calculado:', total);
+    }
+    
+    return total;
   };
 
   if (isLoading) {

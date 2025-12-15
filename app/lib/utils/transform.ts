@@ -36,3 +36,24 @@ export function transformProductos(productos: any[]): any[] {
   if (!Array.isArray(productos)) return productos;
   return productos.map(transformProducto);
 }
+
+export function transformCarritoItem(item: any): any {
+  if (!item) return item;
+  
+  // Transformar el producto si existe
+  const producto = item.producto ? transformProducto(item.producto) : undefined;
+  
+  return {
+    id: item.id,
+    usuario_id: item.usuarioId ?? item.usuario_id,
+    producto_id: item.productoId ?? item.producto_id,
+    producto: producto,
+    cantidad: item.cantidad ?? 0,
+    fecha_agregado: item.fechaAgregado ?? item.fecha_agregado ?? item.fecha_creacion,
+  };
+}
+
+export function transformCarritoItems(items: any[]): any[] {
+  if (!Array.isArray(items)) return [];
+  return items.map(transformCarritoItem);
+}
