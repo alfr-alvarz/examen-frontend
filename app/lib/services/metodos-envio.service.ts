@@ -7,7 +7,9 @@ export const metodosEnvioService = {
   },
 
   async getActivos(): Promise<MetodoEnvio[]> {
-    return api.get<MetodoEnvio[]>('/api/metodos-envio/activos');
+    const data = await api.get<MetodoEnvio[]>('/api/metodos-envio');
+    // Filtrar solo los métodos de envío activos
+    return Array.isArray(data) ? data.filter((m) => m.activo !== false) : [];
   },
 
   async getById(id: number): Promise<MetodoEnvio> {

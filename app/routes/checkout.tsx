@@ -8,9 +8,8 @@ import { FormField } from '~/components/molecules';
 import { useAuth } from '~/contexts/AuthContext';
 import { carritoService } from '~/lib/services/carrito.service';
 import { pedidosService } from '~/lib/services/pedidos.service';
-import { direccionesService } from '~/lib/services/direcciones.service';
 import { metodosEnvioService } from '~/lib/services/metodos-envio.service';
-import type { CarritoItem, DireccionEnvio, MetodoEnvio, MetodoPago } from '~/lib/types';
+import type { CarritoItem, MetodoEnvio, MetodoPago } from '~/lib/types';
 
 export default function Checkout() {
   return (
@@ -24,15 +23,12 @@ function CheckoutContent() {
   const { usuario } = useAuth();
   const navigate = useNavigate();
   const [items, setItems] = useState<CarritoItem[]>([]);
-  const [direcciones, setDirecciones] = useState<DireccionEnvio[]>([]);
   const [metodosEnvio, setMetodosEnvio] = useState<MetodoEnvio[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   // Form state
-  const [direccionId, setDireccionId] = useState<number | null>(null);
-  const [usarNuevaDireccion, setUsarNuevaDireccion] = useState(false);
   const [nuevaDireccion, setNuevaDireccion] = useState({
     nombre_completo: '',
     telefono: '',
@@ -55,9 +51,8 @@ function CheckoutContent() {
     if (!usuario?.id) return;
     try {
       setIsLoading(true);
-      const [carritoData, direccionesData, metodosData] = await Promise.all([
+      const [carritoData, metodosData] = await Promise.all([
         carritoService.getCarrito(usuario.id),
-        direccionesService.getAll(),
         metodosEnvioService.getActivos(),
       ]);
 
@@ -67,18 +62,7 @@ function CheckoutContent() {
       }
 
       setItems(carritoData);
-      setDirecciones(direccionesData);
       setMetodosEnvio(metodosData);
-
-      // Seleccionar dirección principal por defecto
-      const principal = direccionesData.find((d) => d.es_principal);
-      if (principal) {
-        setDireccionId(principal.id);
-      } else if (direccionesData.length > 0) {
-        setDireccionId(direccionesData[0].id);
-      } else {
-        setUsarNuevaDireccion(true);
-      }
 
       // Seleccionar primer método de envío por defecto
       if (metodosData.length > 0) {
@@ -93,59 +77,80 @@ function CheckoutContent() {
 
   const calcularSubtotal = () => {
     return items.reduce((total, item) => {
-      const precio = item.producto?.precio_con_iva || 0;
-      return total + precio * item.cantidad;
+      // Intentar obtener el precio de diferentes formas posibles y convertir a número
+      const precio = Number(
+        item.producto?.precio_con_iva 
+        || item.producto?.precioConIva 
+        || item.precio_con_iva 
+        || item.precioConIva 
+        || 0
+      );
+      const cantidad = Number(item.cantidad || 0);
+      return total + (precio * cantidad);
     }, 0);
   };
 
   const calcularCostoEnvio = () => {
     const metodo = metodosEnvio.find((m) => m.id === metodoEnvioId);
-    return metodo?.costo || 0;
+    return Number(metodo?.costo || 0);
   };
 
   const calcularTotal = () => {
-    return calcularSubtotal() + calcularCostoEnvio();
+    const subtotal = Number(calcularSubtotal());
+    const costoEnvio = Number(calcularCostoEnvio());
+    return subtotal + costoEnvio;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    if (!metodoEnvioId) {
+    if (!metodoEnvioId || isNaN(Number(metodoEnvioId))) {
       setError('Selecciona un método de envío');
       return;
     }
 
-    if (!usarNuevaDireccion && !direccionId) {
-      setError('Selecciona una dirección de envío');
-      return;
-    }
-
-    if (usarNuevaDireccion && !nuevaDireccion.nombre_completo) {
-      setError('Completa todos los campos de la dirección');
+    if (!nuevaDireccion.nombre_completo || !nuevaDireccion.telefono || !nuevaDireccion.direccion || !nuevaDireccion.ciudad || !nuevaDireccion.region) {
+      setError('Completa todos los campos obligatorios de la dirección');
       return;
     }
 
     try {
       setIsSubmitting(true);
 
-      let direccionSeleccionada: DireccionEnvio | null = null;
-      if (!usarNuevaDireccion && direccionId) {
-        direccionSeleccionada = direcciones.find((d) => d.id === direccionId) || null;
+      // Asegurar que metodoEnvioId sea un número válido
+      const metodoEnvioIdNumero = Number(metodoEnvioId);
+      if (isNaN(metodoEnvioIdNumero)) {
+        setError('El método de envío seleccionado no es válido');
+        return;
       }
 
-      const pedidoData = {
-        direccion_envio_id: direccionSeleccionada?.id,
-        metodo_envio_id: metodoEnvioId,
-        metodo_pago: metodoPago,
-        notas_cliente: notas || undefined,
-        nombre_destinatario: direccionSeleccionada?.nombre_completo || nuevaDireccion.nombre_completo,
-        telefono: direccionSeleccionada?.telefono || nuevaDireccion.telefono,
-        direccion: direccionSeleccionada
-          ? `${direccionSeleccionada.calle} ${direccionSeleccionada.numero}`
-          : nuevaDireccion.direccion,
-        ciudad: direccionSeleccionada?.ciudad || nuevaDireccion.ciudad,
-        region: direccionSeleccionada?.region || nuevaDireccion.region,
+      // El backend espera camelCase y un array de items
+      const pedidoData: any = {
+        direccionEnvioId: metodoEnvioIdNumero,
+        metodoPago: metodoPago,
+        notasCliente: notas || undefined,
+        nombreDestinatario: nuevaDireccion.nombre_completo,
+        telefono: nuevaDireccion.telefono,
+        direccion: nuevaDireccion.direccion,
+        ciudad: nuevaDireccion.ciudad,
+        region: nuevaDireccion.region,
+        items: items.map((item) => {
+          // Obtener productoId de diferentes formas posibles
+          const productoId = item.producto_id 
+            || item.productoId 
+            || item.producto?.id 
+            || (item.producto as any)?.productoId;
+          
+          if (!productoId) {
+            console.error('No se pudo obtener productoId del item:', item);
+          }
+          
+          return {
+            productoId: Number(productoId),
+            cantidad: Number(item.cantidad || 0),
+          };
+        }),
       };
 
       const pedido = await pedidosService.create(pedidoData);
@@ -182,43 +187,7 @@ function CheckoutContent() {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4 text-gray-900">Dirección de Envío</h2>
 
-            {direcciones.length > 0 && (
-              <div className="mb-4">
-                <label className="flex items-center mb-2">
-                  <input
-                    type="radio"
-                    checked={!usarNuevaDireccion}
-                    onChange={() => setUsarNuevaDireccion(false)}
-                    className="mr-2"
-                  />
-                  <span className="text-gray-900">Usar dirección guardada</span>
-                </label>
-                {!usarNuevaDireccion && (
-                  <Select
-                    value={direccionId || ''}
-                    onChange={(e) => setDireccionId(Number(e.target.value))}
-                    options={direcciones.map((dir) => ({
-                      value: dir.id,
-                      label: `${dir.alias} - ${dir.calle} ${dir.numero}, ${dir.ciudad}`,
-                    }))}
-                    className="mt-2"
-                  />
-                )}
-              </div>
-            )}
-
-            <label className="flex items-center mb-4">
-              <input
-                type="radio"
-                checked={usarNuevaDireccion}
-                onChange={() => setUsarNuevaDireccion(true)}
-                className="mr-2"
-              />
-              <span className="text-gray-900">Nueva dirección</span>
-            </label>
-
-            {usarNuevaDireccion && (
-              <div className="space-y-4">
+            <div className="space-y-4">
                 <Input
                   placeholder="Nombre completo"
                   value={nuevaDireccion.nombre_completo}
@@ -270,7 +239,6 @@ function CheckoutContent() {
                   }
                 />
               </div>
-            )}
           </div>
 
           {/* Método de envío */}
@@ -336,7 +304,7 @@ function CheckoutContent() {
                   {item.producto?.nombre} × {item.cantidad}
                 </span>
                 <span className="text-gray-900">
-                  ${((item.producto?.precio_con_iva || 0) * item.cantidad).toLocaleString()}
+                  ${((item.producto?.precio_con_iva || item.producto?.precioConIva || item.precio_con_iva || item.precioConIva || 0) * (item.cantidad || 0)).toLocaleString()}
                 </span>
               </div>
             ))}

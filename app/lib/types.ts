@@ -165,15 +165,18 @@ export interface VentaDiaria {
 }
 
 export interface CrearPedidoRequest {
-  direccion_envio_id?: number;
-  metodo_envio_id: number;
-  metodo_pago: MetodoPago;
-  notas_cliente?: string;
-  nombre_destinatario: string;
+  direccionEnvioId: number;
+  metodoPago: MetodoPago;
+  notasCliente?: string;
+  nombreDestinatario: string;
   telefono: string;
   direccion: string;
   ciudad: string;
   region: string;
+  items: Array<{
+    productoId: number;
+    cantidad: number;
+  }>;
 }
 
 export interface AgregarAlCarritoRequest {
