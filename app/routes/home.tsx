@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { MainLayout } from "~/components/templates";
 import { Button } from "~/components/atoms";
+import { useAuth } from "~/contexts/AuthContext";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -11,6 +12,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
+  
   return (
     <MainLayout>
       <div className="text-center py-12">
@@ -22,9 +25,11 @@ export default function Home() {
           <Link to="/productos">
             <Button size="lg">Ver Productos</Button>
           </Link>
-          <Link to="/login">
-            <Button variant="secondary" size="lg">Iniciar Sesión</Button>
-          </Link>
+          {!isAuthenticated && (
+            <Link to="/login">
+              <Button variant="secondary" size="lg">Iniciar Sesión</Button>
+            </Link>
+          )}
         </div>
       </div>
     </MainLayout>
